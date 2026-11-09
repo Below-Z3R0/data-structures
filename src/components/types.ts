@@ -6,41 +6,25 @@ import type {
 } from "react";
 
 // =============================================================================
-// TIPOS INFERIDOS DE SCHEMAS.TS (tipos de dominio de la BD)
+// TIPOS INFERIDOS DE SCHEMAS.TS (tipos de dominio)
 // =============================================================================
 
-import type { IconKey } from "@/services/assets/icon-registry";
 import type {
-  AboutMeContent,
-  AboutMeMetadata,
-  AboutMeSection,
-  Contact,
-  ContactContent,
-  ContactSection,
-  FooterContent,
-  FooterSection,
-  Form,
+  EstructuraMetadata,
   HeroContent,
   HeroMetadata,
-  HeroSection,
-  ModalContent,
-  NavbarContent,
-  NavbarSection,
-  ProjectItem,
-  ProjectsContent,
-  ProjectsList,
-  ProjectsMetadata,
-  ProjectsSection,
-  SkillsContent,
-  SkillsMetadata,
-  SkillsSection,
+  PilaButtons,
+  PilaContent,
+  PilaErrors,
+  PilaLabels,
+  PilaModal,
 } from "./schemas";
 
 // =============================================================================
 // GLOBALES
 // =============================================================================
 
-export type Theme = "dark" | "light" | "system";
+export type Theme = "dark" | "light" | "rosepine-dark" | "rosepine-light";
 export type Language = "en" | "es";
 
 // =============================================================================
@@ -50,15 +34,11 @@ export type Language = "en" | "es";
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   children?: ReactNode;
-  alt?: string;
-  img?: string | null;
-  /** Key del ICON_REGISTRY (e.g. "github", "daynight") o path "folder/file.svg". */
-  svg?: IconKey | string;
-  svgStyle?: string;
+  /** Icono renderizado a la izquierda del texto (componente de lucide-react). */
+  icon?: ReactNode;
   txt?: string | null;
   buttonBody?: string;
   txtStyle?: string;
-  imgStyle?: string;
 }
 
 export type TitleProps = {
@@ -66,105 +46,59 @@ export type TitleProps = {
   className?: string;
 };
 
-export interface LinkButtonProps extends ButtonProps {
-  link: string | null;
-}
-
-export interface IconRendererProps {
-  name: string;
-  className?: string;
-}
-
-export interface Title {
-  txt: string | undefined;
-  className?: string;
-}
-
-export interface SpanProps extends Title {
+export interface SpanProps extends TitleProps {
   children?: ReactNode;
   id?: string;
   role?: string;
+}
+
+export interface ParagraphProps {
+  txt: string | undefined;
+  className?: string;
 }
 
 // =============================================================================
 // MOLECULES — UI con data del orquestador
 // =============================================================================
 
-export interface NavBarProps {
-  nav_data: NavbarSection;
-  name?: boolean;
-  GeneralOrganization?: string;
-  LinksOrganization?: string;
-  ThemeMenuOrganization?: string;
-}
-
-export interface ProjectCardProps {
-  project_data: { meta: ProjectsMetadata; data: ProjectItem };
-  labels_data: { featured: string; in_construction: string };
-  category: string | undefined;
-}
-
-type ModalData = ModalContent & {
-  category: string | undefined;
-  title: string;
-};
-
+/**
+ * Modal generico: backdrop, contenido y cierre.
+ *
+ * `footer` es la zona de acciones (confirmar / cancelar). El contenido
+ * principal va en `children`.
+ */
 export interface ModalProps {
-  img: string | undefined;
-  in_construction: string;
-  data: ModalData;
-  activeTxt: string | undefined;
-  setActivetxt: (txt: string) => void;
   open: boolean;
   onClose: () => void;
+  title?: string;
+  children?: ReactNode;
+  footer?: ReactNode;
+  /** Variante visual del modal. */
+  variant?: "default" | "danger";
 }
 
-export interface TecnologiesConfig {
-  svg: IconKey | string;
-  color?: string;
-  name?: string;
-  bar?: boolean;
-  cardStyle?: string;
-  iconStyle?: string;
-  description?: string;
+export interface PilaCellProps {
+  /** Indice de la celda en el arreglo (base 0). */
+  index: number;
+  /** Valor almacenado, o null si la celda esta libre. */
+  value: number | null;
+  /** Marca la celda que apunta CIMA. */
+  isCima: boolean;
+  /** Etiqueta del eje de indices. */
+  indiceLabel: string;
 }
 
-export interface FieldConfig {
-  name: string;
+/**
+ * Campo de formulario con label, input y mensaje de error.
+ */
+export interface PilaInputProps {
+  id: string;
   label: string;
-  type: HTMLInputTypeAttribute;
-  placeholder: string;
-}
-
-export interface FormularyProps {
-  form_data: Form;
-  bodyStyle?: string;
-  labelStyle?: string;
-  inputStyle?: string;
-  className?: string;
-}
-
-export type FormStatus = "idle" | "loading" | "success" | "error";
-
-export interface SuccessMessageProps {
-  show: boolean;
-  onClose: () => void;
-  title?: string;
-  message?: string;
-  autoCloseMs?: number;
-}
-
-export interface ErrorMessageProps {
-  show: boolean;
-  onClose: () => void;
-  onRetry?: () => void;
-  title?: string;
-  message?: string;
-}
-
-export interface ErrorStateProps {
-  message?: string;
-  onRetry?: () => void;
+  placeholder?: string;
+  type?: HTMLInputTypeAttribute;
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit?: () => void;
 }
 
 // =============================================================================
@@ -172,47 +106,31 @@ export interface ErrorStateProps {
 // =============================================================================
 
 export interface HeroSectionProps {
-  hero_data: HeroSection;
+  hero_data: {
+    data: HeroContent;
+    meta: HeroMetadata;
+  };
 }
 
-export interface TecnologiesSectionProps {
-  skills_data: SkillsSection;
+export interface PilaSectionProps {
+  pila_data: {
+    data: PilaContent;
+    meta: { estructuras: EstructuraMetadata[] };
+  };
 }
 
-export interface ProjectsSectionProps {
-  project_section_data: ProjectsSection;
-  projects_array_data: ProjectsList;
-  currentLang: string;
-}
-
-export interface AboutMeSectionProps {
-  aboutme_data: AboutMeSection;
-}
-
-export interface ContactSectionProps {
-  contact_data: ContactSection;
-}
-
-export interface FooterProps {
-  footer_data: FooterSection;
-}
-
-// =============================================================================
-// ANIMATIONS
-// =============================================================================
-
-export interface AnimationProps {
-  children: ReactNode;
-  delay?: number;
-  className?: string;
-}
-
-export interface SlideProps extends AnimationProps {
-  x?: number;
-}
-
-export interface PopProps extends AnimationProps {
-  scale?: number;
+/**
+ * Datos que la seccion de estructuras le pasa al visualizador de pila.
+ *
+ * Se agrupan en un objeto para que el componente no reciba ocho props
+ * sueltos (regla: un prop que describe un dato, no una forma, vive mas
+ * arriba).
+ */
+export interface PilaViewData {
+  labels: PilaLabels;
+  buttons: PilaButtons;
+  modal: PilaModal;
+  errors: PilaErrors;
 }
 
 // =============================================================================
@@ -220,25 +138,12 @@ export interface PopProps extends AnimationProps {
 // =============================================================================
 
 export type {
-  AboutMeContent,
-  AboutMeMetadata,
-  AboutMeSection,
-  Contact,
-  ContactContent,
-  ContactSection,
-  FooterContent,
-  FooterSection,
+  EstructuraMetadata,
   HeroContent,
   HeroMetadata,
-  HeroSection,
-  NavbarContent,
-  NavbarSection,
-  ProjectItem,
-  ProjectsContent,
-  ProjectsList,
-  ProjectsMetadata,
-  ProjectsSection,
-  SkillsContent,
-  SkillsMetadata,
-  SkillsSection,
+  PilaButtons,
+  PilaContent,
+  PilaErrors,
+  PilaLabels,
+  PilaModal,
 };

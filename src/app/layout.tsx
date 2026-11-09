@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
+  title: "Estructuras de datos — Pilas",
   description:
-    "Template de Next.js con Atomic Design, theming v2, Motion y datos estáticos o Supabase.",
+    "Practica interactiva de estructuras de datos: pila (LIFO) con representacion grafica en memoria y la variable CIMA.",
 };
 
 /**

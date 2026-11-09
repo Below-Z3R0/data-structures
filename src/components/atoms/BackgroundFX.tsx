@@ -1,4 +1,4 @@
-import { NoiseTexture } from "@/services/assets/Icons";
+import { NoiseTexture } from "./NoiseTexture";
 
 export function BackgroundFX() {
   return (

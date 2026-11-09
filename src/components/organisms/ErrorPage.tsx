@@ -1,10 +1,19 @@
+import { AlertTriangle, Home, RotateCw } from "lucide-react";
 import { Button, Paragraph, Title2 } from "../components";
-import type { ErrorStateProps } from "../types";
 
+/**
+ * Pantalla de error centralizada.
+ *
+ * Nunca muestra el mensaje crudo del error: puede filtrar paths o
+ * estructura interna. El detalle real se loguea en el servidor.
+ */
 export function ErrorPage({
-  message = "Hubo un error al cargar los datos del portafolio.",
+  message = "Hubo un error al cargar los datos.",
   onRetry,
-}: ErrorStateProps) {
+}: {
+  message?: string;
+  onRetry?: () => void;
+}) {
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-6">
       <div className="max-w-md w-full bg-card border border-border rounded-2xl p-8 shadow-xl flex flex-col items-center text-center space-y-6 animate-in fade-in zoom-in duration-300">
@@ -12,21 +21,7 @@ export function ErrorPage({
         <div className="relative">
           <div className="absolute inset-0 bg-destructive-soft blur-2xl rounded-full" />
           <div className="relative bg-destructive-soft p-4 rounded-full border border-destructive/20">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-12 h-12 text-destructive"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
+            <AlertTriangle className="size-12 text-destructive" />
           </div>
         </div>
 
@@ -44,23 +39,21 @@ export function ErrorPage({
           {onRetry && (
             <Button
               onClick={onRetry}
+              icon={<RotateCw className="w-4 h-4" />}
               buttonBody="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20"
               txt="Reintentar"
-              svg={"refresh_cw"}
-              svgStyle="w-4 h-4"
             />
           )}
 
           <Button
             onClick={() => (window.location.href = "/")}
+            icon={<Home className="w-4 h-4" />}
             buttonBody="flex-1 flex items-center justify-center gap-2 px-5 py-2.5 bg-popover border border-border text-foreground rounded-lg font-medium hover:bg-hover transition-all active:scale-95"
             txt="Inicio"
-            svg={"home"}
-            svgStyle="w-4 h-4"
           />
         </div>
 
-        {/* Detalle sutil de decoración */}
+        {/* Detalle sutil de decoracion */}
         <div className="pt-4">
           <div className="h-1 w-12 bg-destructive/30 rounded-full mx-auto" />
         </div>

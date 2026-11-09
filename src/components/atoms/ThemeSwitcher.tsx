@@ -1,40 +1,39 @@
 "use client";
+
+import { Palette } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../components";
 import { type Theme, ThemeData, useTheme } from "../hooks/useTheme";
 
-export function ThemeSwitcher({
-  ThemeMenuOrganization,
-}: {
-  ThemeMenuOrganization?: string;
-}) {
+/**
+ * Menu de paletas: permite elegir entre las 4 del sistema de theming.
+ */
+export function ThemeSwitcher() {
   const { setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
-    <>
+    <div className="relative">
       <Button
-        svg={"daynight"}
+        icon={<Palette className="size-5 text-foreground hover:text-primary" />}
         buttonBody="size-7 z-50"
-        svgStyle="text-foreground hover:text-primary"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Cambiar paleta"
+        aria-label="Elegir paleta"
+        aria-expanded={isOpen}
       />
 
       {isOpen && (
-        <div
-          className={`-z-10 mt-50 ml-70 mx-auto absolute w-40 rounded-md p-2 gap-2 flex flex-col items-end bg-background/98 backdrop-blur-xl border border-border shadow-2xl ${ThemeMenuOrganization ?? ""}`}
-        >
+        <div className="absolute right-0 mt-2 z-50 w-40 rounded-md p-2 gap-2 flex flex-col items-center bg-background/98 shadow-2xl">
           {ThemeData.map((cat) => (
             <Button
               onClick={() => setTheme(cat.toLowerCase() as Theme)}
               key={cat}
               txt={cat}
-              buttonBody="flex items-start h-8 w-full p-1 rounded-md"
               txtStyle="hover:text-primary"
             />
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }

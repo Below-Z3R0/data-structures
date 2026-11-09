@@ -1,3 +1,3 @@
-export const SkeletonPulse = ({ className }: { className?: string }) => (
-  <div className={`bg-muted animate-pulse rounded-md ${className}`} />
-);
+export function SkeletonPulse({ className = "" }: { className?: string }) {
+  return <div className={`bg-muted animate-pulse rounded-xl ${className}`} />;
+}

@@ -1,37 +1,36 @@
-import Image from "next/image";
-import { Span } from "../components";
 import type { ButtonProps } from "../types";
-import { IconRender } from "./IconRender";
 
+/**
+ * Boton base del sistema de diseno.
+ *
+ * Acepta texto (`txt`), un icono (`icon`, componente de lucide-react) o
+ * children. No tiene logica de negocio: el `onClick` lo inyecta quien lo
+ * usa.
+ */
 export function Button({
   txt,
-  img,
+  icon,
   children,
-  svg,
-  alt,
-  svgStyle,
-  buttonBody,
+  buttonBody = "",
   txtStyle,
-  imgStyle,
   type = "button",
   onClick,
+  disabled,
+  ...rest
 }: ButtonProps) {
   return (
     <button
-      className={`flex justify-center items-center ${buttonBody}`}
+      className={`flex justify-center items-center gap-2 ${buttonBody}`}
       type={type}
       onClick={onClick}
+      disabled={disabled}
+      {...rest}
     >
-      {txt && <Span txt={txt} className={txtStyle} />}
-      {svg && <IconRender name={svg} className={`size-full ${svgStyle}`} />}
-      {img && (
-        <Image
-          src={`/${img}`}
-          alt={alt || "icon"}
-          className={`size-full ${imgStyle}`}
-          width={80}
-          height={80}
-        />
+      {icon}
+      {txt && (
+        <span className={`text-foreground font-medium ${txtStyle ?? ""}`}>
+          {txt}
+        </span>
       )}
       {children}
     </button>

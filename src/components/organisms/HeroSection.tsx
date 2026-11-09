@@ -1,72 +1,60 @@
-import Image from "next/image";
-import { PopReveal, StaggerGroup, StaggerItem } from "../animations/Animations";
-import { LinkButton, Paragraph, Title2 } from "../components";
+// Client Components: se importan directo del archivo, no del barrel, para
+// evitar el bug de Turbopack con barrels que mezclan client y server.
+import { Button } from "../atoms/Button";
+import { LanguageSwitcher } from "../atoms/LanguageSwitcher";
+import { ThemeSwitcher } from "../atoms/ThemeSwitcher";
+import { Title1 } from "../atoms/Title1";
+import { Title2 } from "../atoms/Title2";
 import type { HeroSectionProps } from "../types";
 
+/**
+ * Cabecera de la pagina.
+ *
+ * En el lugar donde estaria el titulo principal va el menu de estructuras
+ * de datos: botones en linea, uno al lado del otro, que cambian que se
+ * renderiza debajo.
+ */
 export function HeroSection({ hero_data }: HeroSectionProps) {
-  // Primer contacto del mapa general: el proyecto define cuantos y cuales.
-  const social = Object.values(hero_data.meta.contacts)[0];
+  const { data, meta } = hero_data;
 
   return (
-    <section id="Home" className="qw:pt-60">
-      <StaggerGroup className="gap-4 flex flex-col justify-start items-start h-full">
-        {/* Header: Foto y Status */}
-        <StaggerItem>
-          <div className="flex items-center gap-3">
-            <Image
-              src={`/${hero_data.meta.general.image_key}`}
-              className="rounded-full size-25 border border-border object-cover bg-card ring-2 ring-primary/10"
-              alt="Foto de perfil"
-              width={80}
-              height={80}
-              priority
-            />
-            <PopReveal delay={0.3}>
-              <LinkButton
-                buttonBody="flex items-center rounded-full bg-primary-soft border border-border-glow h-8 pl-3 pr-4 transition-all hover:bg-primary-soft/60"
-                txtStyle="text-xs font-semibold text-accent!"
-                link={hero_data.meta.general.contact.link}
-                txt={hero_data.data.workstatus}
-              />
-            </PopReveal>
-          </div>
-        </StaggerItem>
+    <section id="Home" className="pt-10">
+      <div className="flex flex-col gap-8">
+        {/* Controles: idioma, paleta */}
+        <div className="flex items-center justify-end gap-2">
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
 
-        {/* Textos Principales */}
-        <StaggerItem>
-          <Title2 txt={hero_data.data.title} className="mb-5" />
-        </StaggerItem>
-        <StaggerItem>
-          <Paragraph className="max-w-2xl" txt={hero_data.data.paragraph_1} />
-        </StaggerItem>
-        <StaggerItem>
-          <Paragraph className="max-w-2xl" txt={hero_data.data.paragraph_2} />
-        </StaggerItem>
+        {/* Titulos */}
+        <div className="flex flex-col gap-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-primary">
+            {data.eyebrow}
+          </span>
+          <Title1 txt={data.title} />
+          <Title2 txt={data.subtitle} />
+          <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground text-left">
+            {data.paragraph}
+          </p>
+        </div>
 
-        {/* Navegación de Contacto Rápido */}
-        <StaggerItem>
-          <nav className="flex gap-4 mt-4">
-            <LinkButton
-              buttonBody="w-auto px-6 h-11 rounded-xl flex flex-row-reverse items-center justify-center gap-2 bg-primary transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(139,92,246,0.4)]"
-              link={hero_data.meta.general.contact.link}
-              txtStyle="font-bold text-primary-foreground"
-              txt={hero_data.data.contact}
-              svg={hero_data.meta.general.contact.icon_key}
-              svgStyle="text-primary-foreground h-5 w-5"
+        {/* Menu de estructuras de datos */}
+        <nav
+          aria-label="Estructuras de datos"
+          className="flex flex-wrap items-center gap-3"
+        >
+          {meta.estructuras.map((estructura) => (
+            <Button
+              key={estructura.id}
+              txt={estructura.label}
+              title={estructura.description}
+              aria-current="true"
+              buttonBody="h-11 px-6 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20"
+              txtStyle="text-primary-foreground!"
             />
-            {social && (
-              <LinkButton
-                buttonBody="w-auto px-6 h-11 rounded-xl flex flex-row-reverse items-center justify-center gap-2 bg-card border border-border hover:bg-hover hover:border-primary transition-all hover:shadow-[0_0_15px_rgba(139,92,246,0.2)]"
-                link={social.link}
-                txtStyle="text-foreground"
-                txt={social.name}
-                svg={social.icon_key}
-                svgStyle="h-5 w-5"
-              />
-            )}
-          </nav>
-        </StaggerItem>
-      </StaggerGroup>
+          ))}
+        </nav>
+      </div>
     </section>
   );
 }

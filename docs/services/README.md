@@ -1,93 +1,104 @@
+---
+type: docs
+module: services
+status: active
+created: 2026-11-09
+tags: [services, logica, pila, datos]
+---
+
 # Services
 
-Capa de acceso a datos externos. Los componentes no hablan con Supabase ni con
-el sistema de archivos: pasan por aca.
+La capa de servicios: todo lo que **calcula**. Los componentes orquestan
+y muestran; los services resuelven.
 
-## Archivos
-
-| Archivo                                        | Rol                                                              |
-| ---------------------------------------------- | ---------------------------------------------------------------- |
-| `src/services/env.ts`                          | Acceso tipado a variables de entorno + switch de origen de datos |
-| `src/services/data/site.ts`                    | Orquestador de datos del sitio                                   |
-| `src/services/data/static/`                    | Payloads JSON del modo estatico                                  |
-| `src/services/assets/Icons.tsx`                | Iconos SVG inline                                                |
-| `src/services/assets/icon-registry.ts`         | Registro de iconos + schema Zod de las keys                      |
-| `src/services/assets/supabase-image-loader.ts` | Loader de imagenes de Supabase Storage                           |
-| `src/services/supabase/client.ts`              | Cliente de Supabase para el navegador                            |
-| `src/services/supabase/server.ts`              | Cliente de Supabase para servidor                                |
-| `src/services/supabase/middleware.ts`          | Refresco de sesion                                               |
-| `src/services/supabase/types/types.ts`         | Tipos generados de Supabase                                      |
-| `src/services/site-url.ts`                     | URL base del sitio                                               |
-
-## Acceso a variables de entorno
-
-Regla critica: **acceso estatico, nunca indexado**.
-
-```ts
-// Bien: Next.js puede inlinear el valor en el bundle
-get url() {
-  return process.env.NEXT_PUBLIC_SUPABASE_URL;
-}
-
-// Mal: el bundler no puede resolverlo, llega undefined en el navegador
-process.env[name];
+```
+src/services/
+  data/
+    site.ts                       → getSiteData(lang): valida y devuelve el payload
+    static/
+      site.es.json                → datos en espanol
+      site.en.json                → datos en ingles
+  data-structures/
+    pila.ts                       → logica pura de la PILA
+    pila.test.ts                  → tests de esa logica
+    structures.ts                 → registro de estructuras disponibles
 ```
 
-Con `NEXT_PUBLIC_` + acceso indexado, `process.env` queda vacio en el cliente
-y la variable llega como `undefined` en runtime.
+## La regla
 
-Por eso `env.ts` expone **getters** y no constantes: el error aparece en el
-momento del uso, no al importar el modulo.
+> **La logica de una estructura de datos va en `src/services/`, no en el
+> componente.**
 
-## Iconos
+Un service:
 
-Los iconos son SVG inline en `src/services/assets/Icons.tsx`, registrados en
-`icon-registry.ts`:
+- No importa React.
+- No toca el DOM ni globals.
+- No lee `process.env`.
+- Se testea de forma aislada.
+
+Si algo necesita estado de React, no es logica de negocio: es UI, y va
+en el componente.
+
+## `data/site.ts`
+
+Orquestador de datos. Valida el payload contra los schemas de Zod y lo
+devuelve con la forma `SitePayload`. Es la unica fuente de datos de la
+app: ningun componente la consulta por su cuenta.
 
 ```ts
-export const ICON_REGISTRY = {
-  react: ReactIcon,
-  typescript: TypeScriptIcon,
-  // ...
-} as const satisfies Record<string, IconComponent>;
-
-export const IconNameSchema = z.string().refine((val) => val in ICON_REGISTRY, {
-  message: "Debe ser una key del registry (react, docker...)",
-});
+const { content, metadata } = await getSiteData("es");
 ```
 
-`IconNameSchema` es parte del contrato de datos: los JSON de ejemplo no
-pueden referring una key de icono que no exista.
+Sin cache ni red: el origen es local.
 
-Para agregar un icono: escribir el SVG en `Icons.tsx`, registrarlo en
-`icon-registry.ts`. El schema Zod lo valida automaticamente.
+## `data-structures/pila.ts`
 
-## Supabase
+La logica de la PILA. Ver
+**[`docs/structures/README.md`](../structures/README.md)** para el
+detalle del modelo en memoria, los algoritmos y los errores.
 
-- `client.ts` es para Client Components (navegador).
-- `server.ts` es para Server Components y Route Handlers. Usa `cookies()`.
-- `middleware.ts` refresca la sesion en cada request. Sin esto, el token
-  expira mientras el usuario navega.
+Resumen de la API:
 
-Los tres estan tipados con `Database` de `src/services/supabase/types/types.ts`.
-Para regenerar los tipos:
+```ts
+crearPila()                  → Pila
+estaVacia(pila)              → boolean
+estaLlena(pila)              → boolean
+valorCima(pila)              → number | null
+meter(pila, valor)           → ResultadoOperacion<Pila>
+sacar(pila)                  → ResultadoOperacion<{ pila, valor }>
+editarPila(valores)          → ResultadoOperacion<Pila>
+registrarEstado(hist, pila)  → HistorialPila
+regresar(historial)          → ResultadoOperacion<{ pila, historial }>
+valoresPila(pila)            → number[]
+```
+
+Constantes: `TAMAANO_PILA` (6), `VALOR_MINIMO` (1), `VALOR_MAXIMO` (99).
+
+Los schemas de validacion (`ValorPilaSchema`, `ListaValoresPilaSchema`)
+tambien viven aca: son parte del dominio, no de la presentacion.
+
+## `data-structures/structures.ts`
+
+El registro de estructuras de datos que la app puede mostrar. Agregar
+una entrada es lo que hace que aparezca en el menu.
+
+```ts
+export const ESTRUCTURAS: EstructuraInfo[] = [
+  { id: "pila", label: "Pila", description: "Ultimo en entrar, primero en salir (LIFO)" },
+];
+```
+
+El `id` es el identificador tecnico; `label` y `description` son
+traducibles, asi que el menu los toma del payload estatico
+(`metadata["section.hero"].estructuras`).
+
+## Tests
 
 ```bash
-bunx supabase gen types typescript --project-id <PROJECT_ID> \
-  --schema public > src/services/supabase/types/types.ts
+bunx vitest run
 ```
 
-## Imagenes
-
-`supabase-image-loader.ts` es el loader de `next/image` para servir imagenes
-de Supabase Storage. Se activa en `next.config.ts`:
-
-```ts
-images: {
-  loader: "custom",
-  loaderFile: "./src/services/assets/supabase-image-loader.ts",
-},
-```
-
-En modo estatico, las imagenes van en `public/images/` y se referencian
-como `/images/<archivo>`.
+La logica de la pila esta cubierta con 17 casos: METER, SACAR, los
+estados vacio/lleno, la edicion completa, el historial de "Regresar" y
+la inmutabilidad (las funciones no mutan el argumento: devuelven uno
+nuevo).

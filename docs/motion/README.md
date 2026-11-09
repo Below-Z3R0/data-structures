@@ -67,6 +67,33 @@ elemento entra y sale del viewport.
 `StaggerItem` no define `initial` ni `whileInView`: hereda las variantes del
 padre. Si le pones `initial="hidden"` a mano, rompe la orquestacion.
 
+### AnimatePresence (salidas animadas)
+
+Sin `AnimatePresence`, un elemento que se borra desaparece de golpe. Se
+usa para los modales y para las celdas de la pila:
+
+```tsx
+<AnimatePresence mode="wait" initial={false}>
+  {value !== null && (
+    <m.span
+      key={`${index}-${value}`}
+      initial={{ opacity: 0, scale: 0.4, y: -10 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.4, y: 10 }}
+      transition={{ type: "spring", stiffness: 320, damping: 22 }}
+    >
+      {value}
+    </m.span>
+  )}
+</AnimatePresence>
+```
+
+La `key` tiene que cambiar cuando el contenido cambia: es lo que le dice
+a Motion que el elemento es otro y que anime la salida del anterior.
+
+`initial={false}` evita que el primer render anime la entrada: en la pila
+las celdas vacias aparecen quietas.
+
 ## Reglas
 
 - **NUNCA** loops infinitos salvo que sean controlados (`isLoading`).

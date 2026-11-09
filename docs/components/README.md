@@ -1,113 +1,124 @@
+---
+type: docs
+module: components
+status: active
+created: 2026-11-09
+tags: [components, atomic-design, react, nextjs]
+---
+
 # Componentes
 
-Atomic design estricto: tres niveles, una sola regla de dependencia.
-
-## Los tres niveles
+Atomic design: tres niveles, una sola direccion de dependencia.
 
 ```
-atoms/       Primitivas visuales sin logica de negocio.
-             No conocen el dominio. No reciben datos de la DB.
-             Button, Span, Title1..4, Paragraph, IconRender, ThemeSwitcher...
-
-molecules/   Composiciones de atoms con estado o interaccion.
-             Modal, Formulary, NavBar, ProjectCard, TecnologiesCard,
-             SuccessMessage, ErrorMessage...
-
-organisms/   Secciones completas de la pagina. Reciben props tipadas
-             del orquestador. No hacen fetch.
-             Header, Footer, HeroSection, SkillsSection, ProjectsSection,
-             AboutMeSection, ContactSection, ErrorPage
+  ┌─────────────────────────────────────────────────────────┐
+  │  organisms/          Secciones completas de la pagina   │
+  │  HeroSection · PilaSection · ErrorPage                   │
+  │  Reciben props tipadas. No hacen fetch.                 │
+  └───────────────────────────┬─────────────────────────────┘
+                              │  importa
+  ┌───────────────────────────▼─────────────────────────────┐
+  │  molecules/           Composiciones con estado           │
+  │  PilaVisualizer · Modal                                 │
+  └───────────────────────────┬─────────────────────────────┘
+                              │  importa
+  ┌───────────────────────────▼─────────────────────────────┐
+  │  atoms/              Primitivas visuales                │
+  │  Button · PilaCell · PilaInput · Title1..4 · Paragraph  │
+  │  Span · ThemeSwitcher · ThemeToggle · LanguageSwitcher  │
+  │  NoiseTexture · BackgroundFX                            │
+  │  Sin lógica de negocio. Sin datos de la base.           │
+  └─────────────────────────────────────────────────────────┘
 ```
 
-## La regla
+`organisms → molecules → atoms`. Nunca al reves. Un atom nunca importa
+una molecule.
 
-```
-organisms  ->  molecules  ->  atoms
-```
+## Que hay hoy
 
-Nunca al reves. Un atom **nunca** importa una molecule. Un organism **nunca**
-importa un atom directo sin pasar por el barrel cuando la molecule existe.
+| Nivel        | Componentes                                                                                     |
+| ------------ | ----------------------------------------------------------------------------------------------- |
+| `atoms/`     | `BackgroundFX` · `Button` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `PilaCell` · `PilaInput` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4` |
+| `molecules/` | `Modal` · `PilaVisualizer`                                                                        |
+| `organisms/` | `ErrorPage` · `HeroSection` · `PilaSection`                                                      |
 
-## Barrel
+Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
+`useTheme`), `skeletons/` (`HomePageSkeleton`, `SkeletonPulse`).
 
-`src/components/components.ts` es la API publica del sistema de diseno:
+## Server vs Client
+
+Todo es **Server Component** salvo que necesite estado o interaccion del
+navegador.
+
+| Componente           | Tipo   | Por que                                          |
+| -------------------- | ------ | ------------------------------------------------ |
+| `HeroSection`        | Server | Solo renderiza props                              |
+| `PilaVisualizer`     | Server | Solo dibuja                                       |
+| `ErrorPage`          | Server | Solo renderiza props                              |
+| `PilaSection`        | **Client** | Tiene el estado de la pila                   |
+| `Modal`              | **Client** | AnimatePresence y handlers                    |
+| `PilaCell`           | **Client** | AnimatePresence para el valor de la celda     |
+| `PilaInput`          | **Client** | Input controlado                                 |
+| `LanguageSwitcher`   | **Client** | `useRouter` + `useSearchParams`                   |
+| `ThemeSwitcher`      | **Client** | `useTheme`                                        |
+
+`src/app/page.tsx` es un Server Component: **no puede tener estado**. El
+estado de la pila vive en `PilaSection`, que es `"use client"`.
+
+## El bug del barrel (importar directo)
+
+> Cuando un **Server Component** importa un **Client Component** a
+> traves del barrel `components/components.ts`, Turbopack lo resuelve
+> como `undefined` y la pagina revienta con:
+>
+> `Element type is invalid: expected a string ... but got: undefined`
+
+El fix es **importar directo del archivo**:
 
 ```tsx
-import { Button, Title2, HeroSection } from "@/components/components";
+// ✗ falla en runtime
+import { LanguageSwitcher } from "../components";
+
+// ✓ funciona
+import { LanguageSwitcher } from "../atoms/LanguageSwitcher";
 ```
 
-Todos los componentes se importan desde el barrel, incluso entre si. Es lo
-que hace el codigo del proyecto (25 de 31 imports) y mantiene una sola API
-publica.
+Aplica a todos los imports desde un Server Component. Los Client
+Components pueden usar el barrel sin problema.
 
-**Excepcion por bug conocido.** El barrel reexporta con `export *` archivos
-con y sin `"use client"`. En algunas combinaciones de Next.js + Turbopack eso
-rompe en SSR con:
+Los archivos afectados hoy: `src/app/page.tsx`,
+`src/components/organisms/HeroSection.tsx`,
+`src/components/molecules/PilaVisualizer.tsx`.
 
-```
-Element type is invalid: expected a string ... but got: undefined
-```
+## Props
 
-Si aparece ese error, el fix es importar directo del archivo del componente
-client y no desde el barrel:
+- Los contratos viven en `src/components/types.ts`.
+- Los tipos del dominio se infieren con `z.infer` desde
+  `src/components/schemas.ts`.
+- Si un prop no describe **como se ve** el componente sino **que dato**
+  es, ese prop pertenece al organism, no a la molecule. Por eso
+  `PilaSection` recibe un objeto `data` agrupado y no ocho props
+  sueltos.
 
-```tsx
-// ❌ Rompe cuando el barrel mezcla client y server
-import { ProjectCard } from "@/components/components";
+## El barrel
 
-// ✅ Funciona
-import { ProjectCard } from "@/components/molecules/ProjectCard";
-```
-
-Bug abierto: [vercel/next.js#60449](https://github.com/vercel/next.js/issues/60449).
-
-## Tipos
-
-Los contratos de props viven en `src/components/types.ts`. Los tipos del
-dominio (los que salen de la base) viven en `src/components/schemas.ts` y se
-inferyen con `z.infer`.
-
-Regla: si un prop no describe como se ve el componente sino que dato es, ese
-prop pertenece al organism, no a la molecule.
-
-## Client vs Server
-
-Por defecto todo es **Server Component**. El `"use client"` se pone lo mas
-cerca posible de la hoja:
-
-```
-app/page.tsx            (server) -> organisms (server)
-molecules/ProjectCard   (client)  -> atoms (server)
-```
-
-Si un organism necesita `"use client"`, sus hijos server siguen funcionando:
-los Server Components se pueden renderizar dentro de un Client Component.
-
-Cuidado con el caso inverso: un Server Component **no** puede importar
-directamente un Client Component que use hooks como `useState` en un Server
-Component padre sin pasar por `children`.
+`src/components/components.ts` es la API publica del sistema de diseno.
+Todo componente nuevo se exporta desde ahi.
 
 ## Skeletons
 
-Cada seccion tiene su skeleton. Se usan desde `src/app/loading.tsx` y
-`src/components/skeletons/`:
+Hay un skeleton por seccion, indexados desde
+`src/components/skeletons/skeletonindex.tsx`. `src/app/loading.tsx`
+consume el de pagina completa (`HomePageSkeleton`) y
+`src/app/error.tsx` consume `ErrorPage`.
 
-| Skeleton                  | Para que sirve                               |
-| ------------------------- | -------------------------------------------- |
-| `HomePageSkeleton`        | La pagina completa mientras cargan los datos |
-| `NavBarSkeleton`          | La barra de navegacion                       |
-| `TecnologiesCardSkeleton` | Una card de tecnologia                       |
-| `ProjectsCardSkeleton`    | Una card de proyecto                         |
-| `FormularySkeleton`       | El formulario de contacto                    |
-
-`error.tsx` y `loading.tsx` **siempre** existen en `src/app/`. Son la red de
-seguridad de la UX: sin ellos, un error de datos muestra la pantalla en
-blanco.
+Los skeletons se usan para el primer prototipo. Despues, el usuario
+indica cuando actualizarlos: no los reescribas por iniciativa propia.
 
 ## Agregar un componente
 
-1. Definir el nivel: atom, molecule u organism. Si dudas, es molecule.
+1. Definir el nivel (atom, molecule u organism).
 2. Escribir los props en `types.ts`.
-3. Implementar el componente.
+3. Implementarlo en `src/components/<nivel>/<Nombre>.tsx`.
 4. Exportarlo desde `components.ts`.
 5. Si es una seccion nueva, agregar su skeleton.

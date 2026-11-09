@@ -1,90 +1,74 @@
-import { m } from "motion/react";
-import {
-  Button,
-  Paragraph,
-  TecnologiesCard,
-  Title2,
-  Title3,
-} from "../components";
+"use client";
+
+import { X } from "lucide-react";
+import { AnimatePresence, m } from "motion/react";
+import { Button } from "../components";
 import type { ModalProps } from "../types";
 
+/**
+ * Modal generico con backdrop, titulo, contenido y zona de acciones.
+ *
+ * El `exit` de AnimatePresence hace que el cierre sea animado: el
+ * componente se monta/desmonta desde el padre y el modal desaparece con
+ * fade + scale.
+ */
 export function Modal({
-  img,
-  data,
-  in_construction,
+  open,
   onClose,
-  activeTxt,
-  setActivetxt,
+  title,
+  children,
+  footer,
+  variant = "default",
 }: ModalProps) {
   return (
-    <m.div
-      // Backdrop
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
-    >
-      <m.div
-        // Modal content
-        initial={{ opacity: 0, scale: 0.5, y: 30 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.5, y: 30 }}
-        transition={{ type: "spring" }}
-        onClick={(event) => event.stopPropagation()}
-        className="relative w-232 h-210 rounded-3xl bg-card border border-accent/40 shadow-2xl overflow-hidden flex flex-col items-center justify-center"
-      >
-        <div className="relative h-60 w-full">
-          <Button
-            img={img}
-            imgStyle="object-cover mask-b-to-80%"
-            buttonBody="h-100 pointer-events-none w-full"
-          />
-          <div className="absolute inset-0 flex flex-col justify-end pl-20">
-            <Title3 txt={data.category} />
-            <Title2 txt={data.title} />
-          </div>
-        </div>
+    <AnimatePresence>
+      {open && (
+        <m.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+        >
+          <m.div
+            initial={{ opacity: 0, scale: 0.5, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 30 }}
+            transition={{ type: "spring" }}
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            className="relative w-full max-w-120 rounded-3xl bg-card border border-accent/40 shadow-2xl overflow-hidden flex flex-col"
+          >
+            {title && (
+              <div className="flex items-start justify-between gap-4 px-8 pt-7 pb-2">
+                <h3 className="text-xl font-display font-semibold text-foreground">
+                  {title}
+                </h3>
+                <Button
+                  onClick={onClose}
+                  aria-label="Cerrar"
+                  icon={<X className="size-4 text-muted-foreground" />}
+                  buttonBody="p-1 rounded-md hover:bg-hover transition-colors"
+                />
+              </div>
+            )}
 
-        <div className="h-full px-20 pt-5 space-y-3">
-          {activeTxt
-            ? activeTxt
-                .split(/\n\s*\n/)
-                .filter((p) => p.trim().length > 0)
-                .map((paragraph) => (
-                  <Paragraph
-                    key={paragraph.slice(0, 32)}
-                    className="text-[0.97rem]"
-                    txt={paragraph}
-                  />
-                ))
-            : null}
-        </div>
+            <div className="px-8 py-4 overflow-y-auto">{children}</div>
 
-        <div className="flex gap-4 mb-3">
-          {data.tecnologies.map((item) => (
-            <Button
-              buttonBody={`size-8 cursor-pointer ${in_construction}`}
-              onClick={() =>
-                setActivetxt(
-                  activeTxt === item.description
-                    ? data.paragraph
-                    : item.description,
-                )
-              }
-              key={item.name}
-              aria-label={item.name}
-            >
-              <TecnologiesCard
-                cardStyle="bg-transparent! border-none! p-0! h-12! w-8! shadow-none!"
-                svg={item.icon_key}
-                color={item.color}
-                bar={true}
-              />
-            </Button>
-          ))}
-        </div>
-      </m.div>
-    </m.div>
+            {footer && (
+              <div
+                className={`flex gap-3 justify-end px-8 py-6 border-t border-border ${
+                  variant === "danger" ? "border-destructive/30" : ""
+                }`}
+              >
+                {footer}
+              </div>
+            )}
+          </m.div>
+        </m.div>
+      )}
+    </AnimatePresence>
   );
 }
