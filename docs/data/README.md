@@ -88,12 +88,49 @@ En desarrollo no hay cache: siempre se lee de la fuente.
 
 ## Agregar un proyecto
 
-1. Agregar el bloque `project.<slug>` en `content` (con su `tecnologies`).
+1. Agregar el bloque `project.<slug>` en `content` (con sus `tecnologies`).
 2. Agregar el bloque `project.<slug>` en `metadata` (con `title` y los links).
 3. Listo: `pickProjects` lo toma automaticamente.
 
 En modo Supabase, en cambio, hay que insertar en `content_blocks`,
 `translations` y `content_blocks_metadata`.
+
+## Agregar una sección nueva
+
+Agregar una sección (por ejemplo `BlogSection`) es mas trabajo que agregar un
+proyecto, porque la seccion es una clave fija del contrato de datos. Son 6
+pasos en 5 archivos:
+
+| #   | Archivo                                    | Que hacer                                                                                   |
+| --- | ------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| 1   | `src/components/schemas.ts`                | Definir `BlogContentSchema` (y `BlogMetadataSchema` si tiene metadata) con Zod              |
+| 2   | `src/components/schemas.ts`                | Exportar los tipos inferidos: `export type BlogContent = z.infer<typeof BlogContentSchema>` |
+| 3   | `src/services/data/site.ts`                | Registrar la clave en `CONTENT_SCHEMAS` (y `METADATA_SCHEMAS` si aplica)                    |
+| 4   | `src/services/data/site.ts`                | Ampliar los tipos `SiteContent` y `SiteMetadata` con la clave nueva                         |
+| 5   | `src/app/page.tsx`                         | Leer `content["section.blog"]` y pasar las props al organism                                |
+| 6   | `src/components/organisms/BlogSection.tsx` | El organism, que compone sus molecules y atoms                                              |
+
+Sin los pasos 3 y 4 el bloque **no se valida** contra el schema y no queda
+tipado: el payload pasa pero `content["section.blog"]` no existe en el tipo.
+
+Si la seccion tiene metadata, ademas hay que:
+
+- Registrar la clave en `METADATA_SCHEMAS`.
+- Ampliar `SiteMetadata`.
+- Agregar el schema de metadata en `schemas.ts`.
+
+Los JSON estaticos (`src/services/data/static/site.es.json` y `site.en.json`)
+tienen que incluir la clave nueva en `content` y en `metadata`, o el
+orquestador lanza `[site] Missing content for "section.blog"`.
+
+Y si la seccion es una pantalla completa (no un bloque de la landing), se
+agrega como route group propio en `src/app/`, no dentro de `page.tsx`.
+
+### El orden importa
+
+El paso 3 (registrar en `CONTENT_SCHEMAS`) es el que hace que el bloque se
+valide. Sin el, el JSON puede tener la clave y el payload pasaria sin
+validar contra ningun schema, y el error apareceria mas tarde y en otro lado.
 
 ## Cambiar los idiomas
 

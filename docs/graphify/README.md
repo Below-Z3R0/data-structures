@@ -16,6 +16,10 @@ pip install "graphifyy[openai]"
 
 # 2. Extraer el grafo
 graphify extract src/ --out docs/graphify/
+
+# 3. Clusterizar: genera GRAPH_REPORT.md, nombra las comunidades y produce
+#    graph.html. Sin este paso el report no existe.
+graphify cluster-only docs/graphify/
 ```
 
 Eso genera `docs/graphify/graphify-out/` con:
@@ -33,12 +37,16 @@ Eso genera `docs/graphify/graphify-out/` con:
 cat docs/graphify/graphify-out/GRAPH_REPORT.md
 
 # Que importa un archivo
-jq '.edges[] | select(.target | contains("site.ts")) | .source' \
+jq '.links[] | select(.target | contains("site.ts")) | .source' \
   docs/graphify/graphify-out/graph.json
 
 # Verificacion interactiva
 xdg-open docs/graphify/graphify-out/graph.html
 ```
+
+> Las aristas del grafo estan en la clave `links`, no en `edges`. Un `jq`
+> sobre `.edges[]` devuelve vacio y hace parecer que el grafo no tiene
+> relaciones.
 
 ## Reglas
 

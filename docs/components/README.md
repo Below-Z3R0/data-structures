@@ -36,8 +36,30 @@ importa un atom directo sin pasar por el barrel cuando la molecule existe.
 import { Button, Title2, HeroSection } from "@/components/components";
 ```
 
-Los componentes internos usan imports directos (`../atoms/Button`) para no
-crear ciclos a traves del barrel.
+Todos los componentes se importan desde el barrel, incluso entre si. Es lo
+que hace el codigo del proyecto (25 de 31 imports) y mantiene una sola API
+publica.
+
+**Excepcion por bug conocido.** El barrel reexporta con `export *` archivos
+con y sin `"use client"`. En algunas combinaciones de Next.js + Turbopack eso
+rompe en SSR con:
+
+```
+Element type is invalid: expected a string ... but got: undefined
+```
+
+Si aparece ese error, el fix es importar directo del archivo del componente
+client y no desde el barrel:
+
+```tsx
+// ❌ Rompe cuando el barrel mezcla client y server
+import { ProjectCard } from "@/components/components";
+
+// ✅ Funciona
+import { ProjectCard } from "@/components/molecules/ProjectCard";
+```
+
+Bug abierto: [vercel/next.js#60449](https://github.com/vercel/next.js/issues/60449).
 
 ## Tipos
 
