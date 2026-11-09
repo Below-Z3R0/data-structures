@@ -1,34 +1,31 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "../components";
 
-interface LanguageSwitcherProps {
-  currentLang: string;
-}
+export function LanguageSwitcher() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-/**
- * Botón para alternar idioma (ES ↔ EN).
- *
- * IMPORTANTE: usa window.location.href (NO router.push) porque
- * necesitamos un reload COMPLETO para que los Server Components
- * se re-inicialicen con el nuevo idioma.
- */
-export function LanguageSwitcher({ currentLang }: LanguageSwitcherProps) {
-  const pathname = usePathname();
+  const changeLanguage = (newLang: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("lang", newLang);
 
-  const toggleLanguage = () => {
-    const nextLang = currentLang === "es" ? "en" : "es";
-    window.location.href = `${pathname}?lang=${nextLang}`;
+    router.push(`?${params.toString()}`);
   };
 
   return (
-    <button
-      type="button"
-      onClick={toggleLanguage}
-      className="px-3 py-1.5 text-xs font-medium text-body hover:text-main hover:bg-hover rounded-md transition-all duration-200 border border-border-subtle"
-      aria-label="Cambiar idioma"
-    >
-      {currentLang === "es" ? "EN" : "ES"}
-    </button>
+    <div>
+      <Button
+        onClick={() => changeLanguage("en")}
+        txt="English"
+        txtStyle="text-[15px]!"
+      />
+      <Button
+        onClick={() => changeLanguage("es")}
+        txt="Español"
+        txtStyle="text-[15px]!"
+      />
+    </div>
   );
 }

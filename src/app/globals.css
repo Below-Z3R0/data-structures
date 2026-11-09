@@ -1,169 +1,425 @@
 @import "tailwindcss";
 
+/* ==================================================
+ * Sistema de theming v2 — convención shadcn / Material 3 / Noctalia
+ * Convención: {rol} y {rol}-foreground (texto sobre el rol).
+ * Cada rol tiene variantes estándar (soft, container, foreground).
+ * Los roles Rosepine (love/pine/foam/iris/highlight) se mantienen.
+ *
+ * Las 4 paletas son:
+ *   - .dark                (default) — paleta actual violeta dark
+ *   - .light               (default) — paleta actual light con blancos Rosepine suaves
+ *   - .rosepine-dark       (Noctalia) — Rosepine main
+ *   - .rosepine-light      (Noctalia) — Rosepine Dawn
+ *
+ * Cada paleta define las mismas 36 variables.
+ * ================================================== */
 @theme {
-  /* ===== FONDOS ===== */
-  --color-page: var(--bg-page);
-  --color-card: var(--bg-card);
-  --color-surface: var(--bg-surface);
-  --color-hover: var(--bg-hover);
+  /* Roles base — todos en pares (rol + rol-foreground) */
+  --color-background: var(--background);
+  --color-background-foreground: var(--background-foreground);
 
-  /* ===== TEXTO ===== */
-  --color-main: var(--text-main);
-  --color-dim: var(--text-body);
-  --color-muted: var(--text-muted);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
 
-  /* ===== ACENTOS ===== */
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-container: var(--primary-container);
+  --color-primary-container-foreground: var(--primary-container-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
   --color-accent: var(--accent);
-  --color-accent-mid: var(--accent-mid);
-  --color-accent-light: var(--accent-light);
-  --color-accent-soft: var(--accent-soft);
-  --color-accent-alt: var(--accent-alt);
+  --color-accent-foreground: var(--accent-foreground);
 
-  /* ===== BORDES ===== */
-  --color-border-subtle: var(--border-subtle);
-  --color-border-mid: var(--border-mid);
+  /* Semánticos */
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-soft: var(--destructive-soft);
+
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-soft: var(--warning-soft);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-soft: var(--success-soft);
+
+  /* Bordes y outlines */
+  --color-border: var(--border);
+  --color-border-foreground: var(--border-foreground);
   --color-border-glow: var(--border-glow);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 
-  /* ===== TIPOGRAFÍA ===== */
-  --font-serif: var(--font-serif), Georgia, serif;
-  --font-sans: var(--font-sans), Inter, Helvetica, Arial, sans-serif;
+  /* Interacción */
+  --color-hover: var(--hover);
+  --color-pressed: var(--pressed);
+
+  /* Texto y grid */
+  --color-foreground: var(--foreground);
+  --color-footer: var(--footer);
+  --color-grid: var(--grid);
+
+  /* Highlighters */
+  --color-highlight-low: var(--highlight-low);
+  --color-highlight-med: var(--highlight-med);
+  --color-highlight-high: var(--highlight-high);
+
+  /* Rosepine palette */
+  --color-love: var(--love);
+  --color-pine: var(--pine);
+  --color-foam: var(--foam);
+  --color-iris: var(--iris);
+
+  /* Tipografía y breakpoints */
+  --font-display: "Inter", sans-serif;
+  --breakpoint-qw: 921px;
+  --breakpoint-ew: 700px;
+  --breakpoint-ww: 640px;
 }
 
-/* ================================================================
-   TEMA LIGHT — Tonos cálidos y suaves
-   ================================================================ */
-.light {
-  --bg-page: #FAF8F5;
-  --bg-card: #FFFFFE;
-  --bg-surface: #F3EFE8;
-  --bg-hover: #EDE7DC;
-
-  --text-main: #2A2520;
-  --text-body: #5A5249;
-  --text-muted: #9A8E80;
-
-  --accent: #5B5BD6;
-  --accent-mid: #7C3AED;
-  --accent-light: #A78BFA;
-  --accent-soft: rgba(91, 91, 214, 0.08);
-  --accent-alt: #4F46E5;
-
-  --border-subtle: #EFE9DD;
-  --border-mid: #E5DDD0;
-  --border-glow: rgba(91, 91, 214, 0.15);
-
-  --bg-grid: rgba(42, 37, 32, 0.025);
-  --bg-blob-1: rgba(91, 91, 214, 0.08);
-  --bg-blob-2: rgba(124, 58, 237, 0.06);
-  --bg-blob-3: rgba(167, 139, 250, 0.05);
-  --bg-blob-4: rgba(79, 70, 229, 0.07);
-}
-
-/* ================================================================
-   TEMA DARK — Profundo y sofisticado
-   ================================================================ */
+/* ===========================================
+   Dark — paleta violeta (EXPANDIDA, valores originales conservados)
+   =========================================== */
 .dark {
-  --bg-page: #0F172A;
-  --bg-card: #1E293B;
-  --bg-surface: #334155;
-  --bg-hover: #475569;
+  /* Backgrounds — bg negro puro, card gris claro distintivo */
+  --background: #000000;
+  --background-foreground: #fafafa;
 
-  --text-main: #F8FAFC;
-  --text-body: #94A3B8;
-  --text-muted: #64748B;
+  --card: #0a0a0a;
+  --card-foreground: #fafafa;
 
-  --accent: #818CF8;
-  --accent-mid: #A78BFA;
-  --accent-light: #C4B5FD;
-  --accent-soft: rgba(129, 140, 248, 0.12);
-  --accent-alt: #6366F1;
+  --popover: #141414;
+  --popover-foreground: #d7d7d7;
 
-  --border-subtle: #1E293B;
-  --border-mid: #334155;
-  --border-glow: rgba(129, 140, 248, 0.15);
+  --primary: #976aff;
+  --primary-foreground: #ffffff;
+  --primary-soft: rgba(139, 92, 246, 0.1);
+  --primary-container: rgba(82, 57, 138, 0.18);
+  --primary-container-foreground: #ffffff;
 
-  --bg-grid: rgba(248, 250, 252, 0.025);
-  --bg-blob-1: rgba(129, 140, 248, 0.1);
-  --bg-blob-2: rgba(167, 139, 250, 0.08);
-  --bg-blob-3: rgba(196, 181, 253, 0.06);
-  --bg-blob-4: rgba(99, 102, 241, 0.09);
+  /* Nuevos roles para expandir — valores derivados de la paleta original */
+  --secondary: #111113; /* alias de popover */
+  --secondary-foreground: #fafafa;
+
+  --tertiary: #060a13; /* alias de tu bg-muted original */
+  --tertiary-foreground: #fafafa;
+
+  --muted: #111113; /* alias de popover */
+  --muted-foreground: #b8b8c8;
+
+  --accent: #8b5cf6;
+  --accent-foreground: #fafafa;
+
+  --destructive: #f87171;
+  --destructive-foreground: #fafafa;
+  --destructive-soft: rgba(248, 113, 113, 0.1);
+
+  --warning: #f59e0b;
+  --warning-foreground: #090909;
+  --warning-soft: rgba(245, 158, 11, 0.1);
+
+  --success: #34d399;
+  --success-foreground: #090909;
+  --success-soft: rgba(52, 211, 153, 0.1);
+
+  /* Bordes y outlines — tus valores originales */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-foreground: rgba(255, 255, 255, 0.1);
+  --border-glow: rgba(139, 92, 246, 0.3);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: rgba(139, 92, 246, 0.4);
+
+  /* Interacción */
+  --hover: rgba(139, 92, 246, 0.08);
+  --pressed: rgba(139, 92, 246, 0.16);
+
+  /* Texto y grid — tus valores originales */
+  --foreground: #fafafa;
+  --footer: #71717a;
+  --grid: #8a5cf627;
+
+  --highlight-low: rgba(139, 92, 246, 0.04);
+  --highlight-med: rgba(139, 92, 246, 0.08);
+  --highlight-high: rgba(139, 92, 246, 0.16);
+
+  --love: #fb7185;
+  --pine: #34d399;
+  --foam: #22d3ee;
+  --iris: #008fa8;
 }
 
-/* ================================================================
-   UTILIDADES
-   ================================================================ */
-.content-container {
-  margin-inline: auto;
-  padding-inline: calc(var(--spacing) * 6);
+/* ===========================================
+   Light — paleta violeta, jerarquía shadcn
+   =========================================== */
+.light {
+  /* Backgrounds — fondo blanco puro, card warm */
+  --background: #ffffff;
+  --background-foreground: #09090b;
 
-  @media (width >= 48rem) {
-    padding-inline: calc(var(--spacing) * 12);
-  }
+  --card: #ededed;
+  --card-foreground: #09090b;
+
+  --popover: #e4e4e7;
+  --popover-foreground: #1a1925;
+
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --primary-soft: rgba(124, 58, 237, 0.08);
+  --primary-container: rgba(124, 58, 237, 0.12);
+  --primary-container-foreground: #191724;
+
+  --secondary: #f4f4f5;
+  --secondary-foreground: #1a1925;
+
+  --tertiary: #3c3c64;
+  --tertiary-foreground: #1a1925;
+
+  --muted: #f4f4f5;
+  --muted-foreground: #575261;
+
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #fffaf3;
+  --destructive-soft: rgba(220, 38, 38, 0.08);
+
+  --warning: #d97706;
+  --warning-foreground: #fffaf3;
+  --warning-soft: rgba(217, 119, 6, 0.08);
+
+  --success: #059669;
+  --success-foreground: #fffaf3;
+  --success-soft: rgba(5, 150, 105, 0.08);
+
+  --border: rgba(0, 0, 0, 0.08);
+  --border-foreground: rgba(0, 0, 0, 0.05);
+  --border-glow: rgba(124, 58, 237, 0.18);
+  --input: rgba(0, 0, 0, 0.06);
+  --ring: rgba(124, 58, 237, 0.24);
+
+  --hover: rgba(124, 58, 237, 0.04);
+  --pressed: rgba(124, 58, 237, 0.1);
+
+  --foreground: #09090b;
+  --footer: #a1a1aa;
+  --grid: #7c3aed29;
+
+  --highlight-low: rgba(124, 58, 237, 0.03);
+  --highlight-med: rgba(124, 58, 237, 0.07);
+  --highlight-high: rgba(124, 58, 237, 0.12);
+
+  --love: #e11d48;
+  --pine: #059669;
+  --foam: #0891b2;
+  --iris: #0e7490;
 }
 
-input {
-  --tw-outline-style: none;
-  outline-style: none;
+/* ===========================================
+   Rosepine dark (Noctalia) — base oficial
+   =========================================== */
+.rosepine-dark {
+  --background: #191724;
+  --background-foreground: #e0def4;
+
+  --card: #1f1d2e;
+  --card-foreground: #e0def4;
+
+  --popover: #26233a;
+  --popover-foreground: #e0def4;
+
+  --primary: #ebbcba;
+  --primary-foreground: #191724;
+  --primary-soft: rgba(235, 188, 186, 0.1);
+  --primary-container: rgba(235, 188, 186, 0.18);
+  --primary-container-foreground: #e0def4;
+
+  --secondary: #21202e;
+  --secondary-foreground: #e0def4;
+
+  --tertiary: #403d52;
+  --tertiary-foreground: #e0def4;
+
+  --muted: #21202e;
+  --muted-foreground: #c4bfd0;
+
+  --accent: #ebbcba;
+  --accent-foreground: #191724;
+
+  --destructive: #eb6f92;
+  --destructive-foreground: #191724;
+  --destructive-soft: rgba(235, 111, 146, 0.1);
+
+  --warning: #f6c177;
+  --warning-foreground: #191724;
+  --warning-soft: rgba(246, 193, 119, 0.1);
+
+  --success: #9ccfd8;
+  --success-foreground: #191724;
+  --success-soft: rgba(156, 207, 216, 0.1);
+
+  --border: rgba(144, 140, 170, 0.12);
+  --border-foreground: rgba(144, 140, 170, 0.18);
+  --border-glow: rgba(235, 188, 186, 0.3);
+  --input: rgba(144, 140, 170, 0.15);
+  --ring: rgba(235, 188, 186, 0.4);
+
+  --hover: rgba(235, 188, 186, 0.06);
+  --pressed: rgba(235, 188, 186, 0.12);
+
+  --foreground: #e0def4;
+  --footer: #908caa;
+  --grid: #c4a7e72e;
+
+  --highlight-low: #21202e;
+  --highlight-med: #403d52;
+  --highlight-high: #524f67;
+
+  --love: #eb6f92;
+  --pine: #31748f;
+  --foam: #9ccfd8;
+  --iris: #c4a7e7;
 }
 
-html {
-  scroll-behavior: smooth;
+/* ===========================================
+   Rosepine light (Noctalia) — Dawn, jerarquía INVERTIDA (shadcn style)
+   base pasa a ser el MÁS oscuro dentro del tema light.
+   =========================================== */
+.rosepine-light {
+  --background: #fffaf3;
+  --background-foreground: #575279;
+
+  --card: #faf4ed;
+  --card-foreground: #575279;
+
+  --popover: #ebe5d5;
+  --popover-foreground: #575279;
+
+  --primary: #d7827e;
+  --primary-foreground: #ffffff;
+  --primary-soft: rgba(215, 130, 126, 0.1);
+  --primary-container: rgba(215, 130, 126, 0.18);
+  --primary-container-foreground: #191724;
+
+  --secondary: #f4ede8;
+  --secondary-foreground: #575279;
+
+  --tertiary: #dfdad9;
+  --tertiary-foreground: #575279;
+
+  --muted: #f4ede8;
+  --muted-foreground: #44416b;
+
+  --accent: #d7827e;
+  --accent-foreground: #ffffff;
+
+  --destructive: #b4637a;
+  --destructive-foreground: #fffaf3;
+  --destructive-soft: rgba(180, 99, 122, 0.1);
+
+  --warning: #ea9d34;
+  --warning-foreground: #191724;
+  --warning-soft: rgba(234, 157, 52, 0.1);
+
+  --success: #56949f;
+  --success-foreground: #191724;
+  --success-soft: rgba(86, 148, 159, 0.1);
+
+  --border: rgba(25, 23, 36, 0.12);
+  --border-foreground: rgba(25, 23, 36, 0.18);
+  --border-glow: rgba(215, 130, 126, 0.3);
+  --input: rgba(25, 23, 36, 0.16);
+  --ring: rgba(215, 130, 126, 0.4);
+
+  --hover: rgba(215, 130, 126, 0.04);
+  --pressed: rgba(215, 130, 126, 0.1);
+
+  --foreground: #575279;
+  --footer: #797593;
+  --grid: #907aa929;
+
+  --highlight-low: #f4ede8;
+  --highlight-med: #dfdad9;
+  --highlight-high: #cecacd;
+
+  --love: #b4637a;
+  --pine: #286983;
+  --foam: #56949f;
+  --iris: #907aa9;
 }
 
-a {
-  text-decoration: none;
+/* ===========================================
+   Background FX
+   =========================================== */
+.bg-fx {
+  contain: strict;
+  isolation: isolate;
 }
 
-/* Grid pattern decorativo */
-.bg-grid-pattern {
+/* ===========================================
+   Grid
+   =========================================== */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+
   background-image:
-    linear-gradient(to right, var(--bg-grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--bg-grid) 1px, transparent 1px);
-  background-size: 56px 56px;
-  background-position: -1px -1px;
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-color: transparent;
+
+  mask-image: radial-gradient(
+    circle 80vmin at 50% 45%,
+    black 0%,
+    black 25%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle 80vmin at 50% 45%,
+    black 0%,
+    black 25%,
+    transparent 100%
+  );
 }
 
-.bg-grid-mask {
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 50%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 50%, transparent 100%);
+/* ===========================================
+   Noise
+   =========================================== */
+.bg-fx__noise {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  opacity: 0.6;
 }
 
-/* Blobs animados */
-@keyframes blob-drift-1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -40px) scale(1.05); }
-  66% { transform: translate(-20px, 20px) scale(0.95); }
-}
-
-@keyframes blob-drift-2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-30px, 30px) scale(1.1); }
-  66% { transform: translate(20px, -30px) scale(0.95); }
-}
-
-@keyframes blob-drift-3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(20px, 30px) scale(1.08); }
-}
-
-@keyframes blob-drift-4 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(25px, -25px) scale(1.06); }
-  66% { transform: translate(-15px, 35px) scale(0.94); }
-}
-
-.animate-blob-1 {
-  animation: blob-drift-1 25s ease-in-out infinite;
-}
-
-.animate-blob-2 {
-  animation: blob-drift-2 30s ease-in-out infinite;
-}
-
-.animate-blob-3 {
-  animation: blob-drift-3 35s ease-in-out infinite;
-}
-
-.animate-blob-4 {
-  animation: blob-drift-4 28s ease-in-out infinite;
+/* ===========================================
+   Vignette
+   =========================================== */
+.bg-fx__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 45%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.05) 30%,
+    rgba(0, 0, 0, 0.2) 60%,
+    rgba(0, 0, 0, 0.45) 85%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
 }

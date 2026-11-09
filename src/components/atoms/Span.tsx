@@ -1,10 +1,14 @@
-import type { TitleProps } from "../types";
+import type { SpanProps } from "../types";
 
-export function Span({ txt, className, children }: TitleProps & { children?: React.ReactNode }) {
+export function Span({ txt, className, children, role, id }: SpanProps) {
   return (
-    <span className={`text-main font-sans ${className ?? ""}`}>
-      {txt}
+    <span
+      id={id}
+      role={role}
+      className={`text-foreground font-sans text-lg text-balance leading-relaxed font-medium ${className ?? ""}`}
+    >
       {children}
+      {txt}
     </span>
   );
 }

@@ -1,8 +1,14 @@
-import type { ParagraphProps } from "../types";
-
-export function Paragraph({ txt, className }: ParagraphProps) {
+export function Paragraph({
+  txt,
+  className,
+}: {
+  txt: string | undefined;
+  className?: string;
+}) {
   return (
-    <p className={`text-dim font-sans font-light text-[16px] md:text-lg text-left leading-relaxed ${className ?? ""}`}>
+    <p
+      className={`${className ?? ""} text-left text-lg leading-relaxed text-muted-foreground`}
+    >
       {txt}
     </p>
   );

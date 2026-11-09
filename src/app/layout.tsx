@@ -1,59 +1,60 @@
 import type { Metadata } from "next";
-import { Outfit, Cormorant_Garamond } from "next/font/google";
-import { Toaster } from "sonner";
+import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
+import { domAnimation, LazyMotion } from "@/components/animations/Animations";
+import { BackgroundFX } from "@/components/atoms/BackgroundFX";
+import { ThemeProvider } from "@/components/hooks/themeProvider";
 import "./globals.css";
-import { Background } from "@/components/Background";
-import { ThemeProvider } from "@/hooks/themeProvider";
 
-/* ================================================================
-   FUENTES
-   ================================================================ */
-export const outfit = Outfit({
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
-  fallback: ["Inter", "Aptos", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
 });
 
-export const cormorantGaramond = Cormorant_Garamond({
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-serif",
-  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
-/* ================================================================
-   METADATA — Personalizar por proyecto
-   ================================================================ */
 export const metadata: Metadata = {
   title: "Next.js Template",
-  description: "Next.js template with Atomic Design, Supabase, i18n, auth.",
+  description:
+    "Template de Next.js con Atomic Design, theming v2, Motion y datos estáticos o Supabase.",
 };
 
-/* ================================================================
-   ROOT LAYOUT
-   ================================================================ */
+/**
+ * Anti-FOUC: aplica la paleta guardada en localStorage antes del primer paint.
+ * Sin esto, el html arranca sin clase de tema y el usuario ve un flash
+ * del tema por defecto.
+ */
+const ANTI_FOUC_SCRIPT = `(function(){try{var k=localStorage.getItem('theme');var c=document.documentElement;var v=['light','dark','rosepine-dark','rosepine-light'];if(k&&v.indexOf(k)>-1){c.classList.remove.apply(c.classList,v);c.classList.add(k);}else{c.classList.add('rosepine-dark');}}catch(e){}})();`;
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="es"
-      className={`${cormorantGaramond.variable} ${outfit.variable}`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth scrollbar-gutter-stable`}
       suppressHydrationWarning
     >
-      <body className="box-border flex flex-col mx-auto my-0 min-h-full font-sans antialiased text-main relative bg-transparent">
+      <body className="min-h-full text-[18px] leading-[145%] tracking-[0.18px] text-foreground bg-background font-display">
+        <Script id="theme-anti-fouc" strategy="beforeInteractive">
+          {ANTI_FOUC_SCRIPT}
+        </Script>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="rosepine-dark"
+          enableSystem={false}
+          themes={["light", "dark", "rosepine-dark", "rosepine-light"]}
           disableTransitionOnChange
         >
-          <Background />
-          {children}
-          <Toaster richColors position="top-center" />
+          <LazyMotion features={domAnimation} strict>
+            <BackgroundFX />
+            {children}
+          </LazyMotion>
         </ThemeProvider>
       </body>
     </html>

@@ -1,8 +1,8 @@
 "use client";
 
-import { Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme } from "@/components/hooks/useTheme";
+import { Button } from "../components";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -13,16 +13,24 @@ export function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return <div className="size-10" aria-hidden="true" />;
+    return (
+      <button
+        type="button"
+        aria-label="Cambiar tema"
+        className="p-2 text-muted-foreground hover:text-foreground hover:bg-hover rounded-md transition-all duration-200 border border-border"
+      >
+        <span className="size-5 inline-block" />
+      </button>
+    );
   }
 
   return (
-    <button
+    <Button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       aria-label="Cambiar tema"
-      className="p-2 text-body hover:text-main hover:bg-hover rounded-md transition-all duration-200 border border-border-subtle"
-    >
-      {theme === "dark" ? <Sun className="size-5" /> : <Moon className="size-5" />}
-    </button>
+      svg={"daynight"}
+      svgStyle="text-foreground"
+      buttonBody="p-2 text-muted-foreground hover:text-foreground hover:bg-hover rounded-md transition-all duration-200 border border-border"
+    />
   );
 }
