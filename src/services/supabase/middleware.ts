@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
-import { supabaseEnv } from "@/services/env";
+import { isSupabaseConfigured, supabaseEnv } from "@/services/env";
 import type { Database } from "./types/types";
 
 /**
@@ -10,11 +10,11 @@ import type { Database } from "./types/types";
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
-  // Sin credenciales cargadas no hay sesion que refrescar (modo estatico).
-  if (
-    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
-  ) {
+  // Sin credenciales validas no hay sesion que refrescar (modo estatico).
+  // El guard valida el FORMATO de la URL: un .env.local copiado del
+  // .env.example tiene placeholders que existen pero no son una URL valida,
+  // y createServerClient revienta con "Invalid supabaseUrl" en cada request.
+  if (!isSupabaseConfigured()) {
     return supabaseResponse;
   }
 
