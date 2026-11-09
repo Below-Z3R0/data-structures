@@ -610,14 +610,15 @@ lockfile es `bun.lock`: no generar `package-lock.json` ni `pnpm-lock.yaml`.
    `ANTI_FOUC_SCRIPT`. **Sin esto, la paleta nueva no se aplica en el primer
    paint** y el sitio arranca en `dark`.
 
-**¿La doc alcanza?** No del todo. `docs/theming/README.md` dice "agregar una
-variable nueva" (4 pasos) pero **no dice cómo agregar una paleta**, que son 8
-pasos en 5 archivos. La IA tiene que derivar los pasos 3-8 leyendo el código.
-Además la doc dice "36 variables" cuando son 45. `.hermes.md` cubre el punto 1
-y 2 pero tampoco la receta de paleta.
+**¿La doc alcanza?** Ahora sí. La receta completa esta en
+**`docs/theming/paleta-nueva.md`**: los 8 pasos con el path y el nombre exacto
+de cada variable, mas el bloque `.ocean` de ejemplo con las 45 variables.
+`docs/theming/README.md` ahora linka a esa receta. El conteo de variables
+también esta corregido (45, no 36).
 
-**Veredicto: hueco confirmado.** La receta de paleta nueva debería estar
-completa en `docs/theming/README.md`.
+**Veredicto: RESUELTO** (2026-11-09). Verificado aplicando la receta de
+verdad sobre una copia del template: `tsc --noEmit`, `bun run lint` y
+`bun run build` pasan, la paleta aparece en el menu, y la recarga no parpadea.
 
 ---
 
@@ -728,8 +729,10 @@ solo dice "usar `text-primary-foreground` en vez de `text-white`".
   insertar primero el `content_blocks` (por el FK de `translations` y
   `content_blocks_metadata`) y después las traducciones.
 
-**Veredicto: hueco confirmado.** El paso 2 es bloqueante para una IA que solo
-lee `docs/`.
+**Veredicto: RESUELTO** (2026-11-09). El paso 2 esta documentado en
+`docs/setup-database.md`: que crea el script, como correrlo (Dashboard o
+`supabase db push`), que variables hacen falta, como verificar y que hacer si
+la RPC no existe o faltan las policies.
 
 ---
 
@@ -1024,11 +1027,13 @@ Al terminar esos 10, corré el gate antes de tocar nada:
 
 - **`src/components/organisms/IASection.tsx` y `OSSection.tsx`** — muertos, no
   están en el barrel, no los usa nadie. Son copias de `ProjectsSection`.
-- **`src/services/assets/supabase-image-loader.ts`** — el loader no está
-  habilitado en `next.config.ts`. Solo miralo si vas a servir imágenes de
-  Storage.
+- **`src/services/assets/supabase-image-loader.ts`** — el loader **sí** está
+  habilitado en `next.config.ts` (`images.loader: "custom"`). Es el codigo que
+  se usa si sirves imagenes de Supabase Storage, pero no hace falta leerlo
+  para trabajar en el sitio.
 - **`src/components/atoms/LanguageSwitcher.tsx`** — no lo usa nadie;
   `NavBar` usa `LanguageToggle`. Cuando toques i18n, elegí uno y borra el otro.
+  Ver `docs/i18n/README.md`.
 - **`src/components/skeletons/SkeletonPulse.tsx`** — está duplicado dentro de
   `HomePageSkeleton.tsx:8`. No lo copies.
 - **`src/components/hooks/theming.v2.ts`** — es documentación ejecutable, no
@@ -1039,7 +1044,26 @@ Al terminar esos 10, corré el gate antes de tocar nada:
 - **`node_modules/`** — solo `next-themes/dist/index.js` si necesitás verificar
   en qué nodo monta la clase (esa es la forma de resolver el `:where()`).
 - **`.next/`, `tsconfig.tsbuildinfo`** — artefactos de build.
-- **`setup-database.sql`** — leelo solo si vas a modo Supabase.
+- **`setup-database.sql`** — leelo solo si vas a modo Supabase. El paso a
+  paso esta en `docs/setup-database.md`.
+
+### Antes de inventar: que hay ya escrito
+
+Estos documentos cubren los casos mas comunes. Consultalos antes de derivar
+la respuesta leyendo el codigo:
+
+| Si la tarea es...                                | Leé                                     |
+| ------------------------------------------------ | --------------------------------------- |
+| Agregar una paleta nueva                         | `docs/theming/paleta-nueva.md`          |
+| Pasar a Supabase / cargar contenido              | `docs/setup-database.md`                |
+| Cambiar el idioma o agregar uno                  | `docs/i18n/README.md`                   |
+| Tocar el login, el OAuth o el panel admin        | `docs/auth-and-routes/README.md`        |
+| Cambiar el modo de datos                         | `docs/decisions/data-source-switch.md`  |
+| Cambiar el package manager o el linter           | `docs/decisions/package-manager-bun.md` |
+| Agregar un componente                            | `docs/components/README.md`             |
+| Agregar una animacion                            | `docs/motion/README.md`                 |
+| Entender el contrato de datos                    | `docs/data/README.md`                   |
+| Entender las variables de entorno y los clientes | `docs/services/README.md`               |
 
 ### El orden de trabajo cuando arrive una tarea
 
