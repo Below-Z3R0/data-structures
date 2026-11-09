@@ -1,0 +1,353 @@
+{
+  "content": {
+    "section.hero": {
+      "title": "Construyo productos digitales que se sienten rápidos",
+      "contact": "Hablemos",
+      "workstatus": "Disponible para nuevos proyectos",
+      "paragraph_1": "Desarrollo aplicaciones web con foco en performance, accesibilidad y una base de código que otro equipo pueda mantener sin YH.",
+      "paragraph_2": "Trabajo con equipos de producto desde la primera maqueta hasta el despliegue, usando React, Next.js y Postgres."
+    },
+    "section.navbar": {
+      "data": [
+        {
+          "id": 1,
+          "link": "#Home",
+          "name": "Inicio"
+        },
+        {
+          "id": 2,
+          "link": "#Tecnologies",
+          "name": "Stack"
+        },
+        {
+          "id": 3,
+          "link": "#Proyects",
+          "name": "Proyectos"
+        },
+        {
+          "id": 4,
+          "link": "#AboutMe",
+          "name": "Sobre mí"
+        },
+        {
+          "id": 5,
+          "link": "#Contact",
+          "name": "Contacto"
+        }
+      ]
+    },
+    "section.skills": {
+      "title_sm": "Stack",
+      "title_lg": "Herramientas que uso a diario",
+      "paragraph": "Elijo por criterio y estabilidad, no por moda. Cada pieza tiene que justifiable el costo de mantenerla."
+    },
+    "section.aboutme": {
+      "title_sm": "Sobre mí",
+      "title_lg": "Ingeniero de software con obsesión por los detalles",
+      "paragraph_1": "Empecé programando por curiosidad y hoy diseño sistemas completos: desde el modelo de datos hasta la interfaz. Me gusta que el producto se entienda solo.",
+      "paragraph_2": "Cuando no escribo código, preparo documentacion y mentoría a personas que están dando sus primeros pasos."
+    },
+    "section.projects": {
+      "title_sm": "Proyectos",
+      "title_lg": "Cosas que construí y que siguen vivas",
+      "paragraph": "Cada proyecto resume una necesidad real, una decisión técnica y lo que aprendí en el camino.",
+      "labels": {
+        "featured": "Destacado",
+        "in_construction": "En construcción"
+      }
+    },
+    "section.contact": {
+      "title_lg": "¿Empezamos algo?",
+      "title_sm": "Contacto",
+      "paragraph": "Contame qué querés construir y te respondo con una propuesta concreta, sin vueltas.",
+      "form": {
+        "send": "Enviar mensaje",
+        "sending": "Enviando",
+        "title": "Escribime",
+        "top": [
+          {
+            "name": "name",
+            "label": "Nombre",
+            "type": "text",
+            "placeholder": "Tu nombre"
+          },
+          {
+            "name": "user_email",
+            "label": "Email",
+            "type": "email",
+            "placeholder": "tu@email.com"
+          },
+          {
+            "name": "title",
+            "label": "Asunto",
+            "type": "text",
+            "placeholder": "Sobre qué es el proyecto"
+          }
+        ],
+        "bottom": {
+          "name": "message",
+          "label": "Mensaje",
+          "type": "text",
+          "placeholder": "Contame el contexto"
+        }
+      }
+    },
+    "section.footer": {
+      "built_with": "Construido con Next.js, TypeScript y Motion",
+      "copyright": "Todos los derechos reservados"
+    },
+    "project.atlas": {
+      "paragraph": "Panel de control para equipos de soporte: tableros en vivo, SLA por cliente y alertas que priorizan solas.",
+      "tecnologies": [
+        {
+          "icon_key": "next",
+          "name": "Next.js",
+          "color": "#fafafa",
+          "description": "App Router con Server Components para renderizar tableros sin enviar datos al cliente."
+        },
+        {
+          "icon_key": "postgressql",
+          "name": "PostgreSQL",
+          "color": "#4b7bbe",
+          "description": "Consultas agregadas y vistas materializadas para los SLA."
+        },
+        {
+          "icon_key": "tailwind",
+          "name": "Tailwind",
+          "color": "#38bdf8",
+          "description": "Sistema de diseno con tokens semanticos y paletas multiples."
+        }
+      ],
+      "modal": {
+        "img_key": "images/project-1.png",
+        "paragraph": "El equipo triplico la resolucion de tickets sin sumar gente: la priorizacion dejo de ser manual.\n\nLa parte dificil fue mantener la coherencia entre el dashboard en vivo y los datos historicos.",
+        "tecnologies": [
+          {
+            "icon_key": "react",
+            "name": "React",
+            "color": "#61dafb",
+            "description": "Componentes reutilizables con estado optimista en el cliente."
+          },
+          {
+            "icon_key": "supabase",
+            "name": "Supabase",
+            "color": "#3ecf8e",
+            "description": "Realtime para las alertas y RLS para aislar los datos por cliente."
+          }
+        ]
+      }
+    },
+    "project.beacon": {
+      "paragraph": "Rastreador de uptime con checks desde cinco regiones, alertas por Telegram y pagina de estado publica.",
+      "tecnologies": [
+        {
+          "icon_key": "docker",
+          "name": "Docker",
+          "color": "#2496ed",
+          "description": "Checks reproducibles: la misma imagen corre en cada region."
+        },
+        {
+          "icon_key": "node",
+          "name": "Node.js",
+          "color": "#5fa04e",
+          "description": "Workers asincronicos paraChecks y notificaciones."
+        },
+        {
+          "icon_key": "github",
+          "name": "GitHub",
+          "color": "#fafafa",
+          "description": "Deploys desde actions con historial de releases."
+        }
+      ],
+      "modal": {
+        "img_key": "images/project-2.png",
+        "paragraph": "El servicio sostiene 400 checks por minuto con un solo contenedor de 512 MB.\n\nLo que mas aprendi: measure todo lo que prometes, porque el cliente nota la diferencia.",
+        "tecnologies": [
+          {
+            "icon_key": "typescript",
+            "name": "TypeScript",
+            "color": "#3178c6",
+            "description": "Tipos compartidos entre el worker y el panel."
+          },
+          {
+            "icon_key": "zod",
+            "name": "Zod",
+            "color": "#3c4cba",
+            "description": "Validacion en el borde: nada entra sin pasar por el schema."
+          }
+        ]
+      }
+    },
+    "project.ledger": {
+      "paragraph": "Panel de gastos para equipos remotos: carga de recibos,Categorizacion automatica y cierre mensual exportable.",
+      "tecnologies": [
+        {
+          "icon_key": "typescript",
+          "name": "TypeScript",
+          "color": "#3178c6",
+          "description": "Dominio de gastos con tipos discriminados por estado."
+        },
+        {
+          "icon_key": "figma",
+          "name": "Figma",
+          "color": "#f24e1e",
+          "description": "Diseno del flujo de carga definido junto al equipo de producto."
+        },
+        {
+          "icon_key": "html5",
+          "name": "HTML5",
+          "color": "#e34f26",
+          "description": "Formularios accesibles y semanticos en el flujo de recibo."
+        }
+      ],
+      "modal": {
+        "img_key": "images/project-3.png",
+        "paragraph": "La categorizacion automatica resolvio el 70% de los gastos sin intervencion humana.\n\nEl proyecto quedo en produccion y hoy lo usa un equipo de 30 personas.",
+        "tecnologies": [
+          {
+            "icon_key": "next",
+            "name": "Next.js",
+            "color": "#fafafa",
+            "description": "Server Actions para la carga de recibos sin endpoint propio."
+          },
+          {
+            "icon_key": "motion",
+            "name": "Motion",
+            "color": "#ebbcba",
+            "description": "Transiciones sutiles que explican el flujo de categorizacion."
+          }
+        ]
+      }
+    }
+  },
+  "metadata": {
+    "section.hero": {
+      "image_key": "images/profile.png",
+      "contact": {
+        "link": "#Contact",
+        "icon_key": "mail"
+      }
+    },
+    "general.contacts": {
+      "github": {
+        "id": 1,
+        "icon_key": "github",
+        "name": "GitHub",
+        "link": "https://github.com/tu-usuario"
+      },
+      "linkedin": {
+        "id": 2,
+        "icon_key": "linkedin",
+        "name": "LinkedIn",
+        "link": "https://linkedin.com/in/tu-usuario"
+      },
+      "email": {
+        "id": 3,
+        "icon_key": "mail",
+        "name": "Email",
+        "link": "mailto:hola@ejemplo.dev"
+      }
+    },
+    "section.skills": {
+      "categories": [
+        {
+          "name": "Frontend",
+          "skills": [
+            {
+              "name": "React",
+              "color": "#61dafb",
+              "icon_key": "react"
+            },
+            {
+              "name": "TypeScript",
+              "color": "#3178c6",
+              "icon_key": "typescript"
+            },
+            {
+              "name": "Next.js",
+              "color": "#fafafa",
+              "icon_key": "next"
+            },
+            {
+              "name": "Tailwind",
+              "color": "#38bdf8",
+              "icon_key": "tailwind"
+            }
+          ]
+        },
+        {
+          "name": "Backend",
+          "skills": [
+            {
+              "name": "Node.js",
+              "color": "#5fa04e",
+              "icon_key": "node"
+            },
+            {
+              "name": "PostgreSQL",
+              "color": "#4b7bbe",
+              "icon_key": "postgressql"
+            },
+            {
+              "name": "Supabase",
+              "color": "#3ecf8e",
+              "icon_key": "supabase"
+            },
+            {
+              "name": "Zod",
+              "color": "#3c4cba",
+              "icon_key": "zod"
+            }
+          ]
+        },
+        {
+          "name": "DevOps",
+          "skills": [
+            {
+              "name": "Docker",
+              "color": "#2496ed",
+              "icon_key": "docker"
+            },
+            {
+              "name": "Git",
+              "color": "#f14e32",
+              "icon_key": "git"
+            },
+            {
+              "name": "GitHub",
+              "color": "#fafafa",
+              "icon_key": "github"
+            }
+          ]
+        }
+      ]
+    },
+    "section.aboutme": {
+      "image_key": "images/about.png"
+    },
+    "project.atlas": {
+      "title": "Atlas",
+      "image_key": "images/project-1.png",
+      "link_github": "https://github.com/tu-usuario/atlas",
+      "link_live_demo": "https://atlas.ejemplo.dev",
+      "is_relevant": true,
+      "is_in_construction": false
+    },
+    "project.beacon": {
+      "title": "Beacon",
+      "image_key": "images/project-2.png",
+      "link_github": "https://github.com/tu-usuario/beacon",
+      "link_live_demo": "https://beacon.ejemplo.dev",
+      "is_relevant": true,
+      "is_in_construction": false
+    },
+    "project.ledger": {
+      "title": "Ledger",
+      "image_key": "images/project-3.png",
+      "link_github": "https://github.com/tu-usuario/ledger",
+      "link_live_demo": null,
+      "is_relevant": false,
+      "is_in_construction": true
+    }
+  }
+}
