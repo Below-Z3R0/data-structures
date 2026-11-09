@@ -22,28 +22,28 @@ docs/
 
 ## Los modulos
 
-| Modulo        | Que documenta                                                        |
-| ------------- | -------------------------------------------------------------------- |
-| `structures`  | La PILA: modelo en memoria, algoritmos, errores y el flujo de la UI    |
-| `theming`     | Las 4 paletas, los tokens y **como agregar una paleta nueva**        |
-| `motion`      | Las primitivas de animacion y las reglas de `LazyMotion`             |
-| `data`        | El contrato `content`/`metadata` y el origen estatico                 |
-| `components`  | Atomic design: los tres niveles y como agregar un componente         |
-| `services`    | La capa de servicios: datos estaticos y logica de estructuras        |
-| `decisions`   | Las decisiones tecnicas con contexto y alternativas descartadas      |
-| `i18n`        | El idioma por query param, los datos por idioma y el tipo `Language` |
+| Modulo       | Que documenta                                                        |
+| ------------ | -------------------------------------------------------------------- |
+| `structures` | La PILA: modelo en memoria, algoritmos, errores y el flujo de la UI  |
+| `theming`    | Las 4 paletas, los tokens y **como agregar una paleta nueva**        |
+| `motion`     | Las primitivas de animacion y las reglas de `LazyMotion`             |
+| `data`       | El contrato `content`/`metadata` y el origen estatico                |
+| `components` | Atomic design: los tres niveles y como agregar un componente         |
+| `services`   | La capa de servicios: datos estaticos y logica de estructuras        |
+| `decisions`  | Las decisiones tecnicas con contexto y alternativas descartadas      |
+| `i18n`       | El idioma por query param, los datos por idioma y el tipo `Language` |
 
 ## Donde empezar
 
-| Si queres...                       | Lee                                |
-| ---------------------------------- | ---------------------------------- |
-| Levantar el proyecto               | `README.md` de la raiz del proyecto |
-| Entender la PILA                  | `structures/README.md`             |
-| Agregar una paleta                 | `theming/paleta-nueva.md`          |
-| Entender por que Bun y no pnpm     | `decisions/package-manager-bun.md` |
-| Agregar un idioma                  | `i18n/README.md`                   |
-| Agregar una estructura de datos    | `structures/README.md`             |
-| Agregar un componente              | `components/README.md`             |
+| Si queres...                    | Lee                                 |
+| ------------------------------- | ----------------------------------- |
+| Levantar el proyecto            | `README.md` de la raiz del proyecto |
+| Entender la PILA                | `structures/README.md`              |
+| Agregar una paleta              | `theming/paleta-nueva.md`           |
+| Entender por que Bun y no pnpm  | `decisions/package-manager-bun.md`  |
+| Agregar un idioma               | `i18n/README.md`                    |
+| Agregar una estructura de datos | `structures/README.md`              |
+| Agregar un componente           | `components/README.md`              |
 
 ## Convenciones
 
@@ -59,8 +59,12 @@ docs/
 2. Crear `docs/<modulo>/README.md` con el indice y el contexto.
 3. Sumarlo a la lista de este README.
 
-## Donde NO va la documentacion
+## Otros proyectos
 
-- El proposito del proyecto y como se usa: `README.md` de la raiz.
-- Las reglas para el agente que trabaja en el proyecto: `.hermes.md`.
-- El punto de entrada para agentes: `AGENTS.md`.
+Este proyecto forma parte de un conjunto de estructuras de datos que se
+van a ir implementando: Pila es la primera, y la idea es ir agregando
+Cola, Lista, Arbol y demas para poder visualizarlas y probarlas en el
+navegador.
+
+Si te interesa ver mas trabajo mio, aca esta mi
+[portafolio](https://emmanueltech.vercel.app/).

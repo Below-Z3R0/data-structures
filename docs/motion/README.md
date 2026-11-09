@@ -85,7 +85,7 @@ usa para los modales y para las celdas de la pila:
       {value}
     </m.span>
   )}
-</AnimatePresence>
+</AnimatePresence>;
 ```
 
 La `key` tiene que cambiar cuando el contenido cambia: es lo que le dice

@@ -1,4 +1,5 @@
 ---
+
 type: docs
 module: components
 status: active
@@ -36,11 +37,11 @@ una molecule.
 
 ## Que hay hoy
 
-| Nivel        | Componentes                                                                                     |
-| ------------ | ----------------------------------------------------------------------------------------------- |
+| Nivel        | Componentes                                                                                                                                                                                     |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `atoms/`     | `BackgroundFX` · `Button` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `PilaCell` · `PilaInput` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4` |
-| `molecules/` | `Modal` · `PilaVisualizer`                                                                        |
-| `organisms/` | `ErrorPage` · `HeroSection` · `PilaSection`                                                      |
+| `molecules/` | `Modal` · `PilaVisualizer`                                                                                                                                                                      |
+| `organisms/` | `ErrorPage` · `HeroSection` · `PilaSection`                                                                                                                                                     |
 
 Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
 `useTheme`), `skeletons/` (`HomePageSkeleton`, `SkeletonPulse`).
@@ -50,17 +51,17 @@ Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
 Todo es **Server Component** salvo que necesite estado o interaccion del
 navegador.
 
-| Componente           | Tipo   | Por que                                          |
-| -------------------- | ------ | ------------------------------------------------ |
-| `HeroSection`        | Server | Solo renderiza props                              |
-| `PilaVisualizer`     | Server | Solo dibuja                                       |
-| `ErrorPage`          | Server | Solo renderiza props                              |
-| `PilaSection`        | **Client** | Tiene el estado de la pila                   |
-| `Modal`              | **Client** | AnimatePresence y handlers                    |
-| `PilaCell`           | **Client** | AnimatePresence para el valor de la celda     |
-| `PilaInput`          | **Client** | Input controlado                                 |
-| `LanguageSwitcher`   | **Client** | `useRouter` + `useSearchParams`                   |
-| `ThemeSwitcher`      | **Client** | `useTheme`                                        |
+| Componente         | Tipo       | Por que                                   |
+| ------------------ | ---------- | ----------------------------------------- |
+| `HeroSection`      | Server     | Solo renderiza props                      |
+| `PilaVisualizer`   | Server     | Solo dibuja                               |
+| `ErrorPage`        | Server     | Solo renderiza props                      |
+| `PilaSection`      | **Client** | Tiene el estado de la pila                |
+| `Modal`            | **Client** | AnimatePresence y handlers                |
+| `PilaCell`         | **Client** | AnimatePresence para el valor de la celda |
+| `PilaInput`        | **Client** | Input controlado                          |
+| `LanguageSwitcher` | **Client** | `useRouter` + `useSearchParams`           |
+| `ThemeSwitcher`    | **Client** | `useTheme`                                |
 
 `src/app/page.tsx` es un Server Component: **no puede tener estado**. El
 estado de la pila vive en `PilaSection`, que es `"use client"`.

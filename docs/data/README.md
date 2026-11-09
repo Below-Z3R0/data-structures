@@ -1,4 +1,5 @@
 ---
+
 type: docs
 module: data
 status: active
@@ -48,29 +49,36 @@ payload es la misma en ambos: lo que cambia es el idioma, no la forma.
 
 ## Archivos
 
-| Archivo                                 | Rol                                                        |
-| --------------------------------------- | ---------------------------------------------------------- |
-| `src/services/data/site.ts`             | Orquestador: valida y expone `getSiteData(lang)`           |
-| `src/services/data/static/site.es.json` | Datos estaticos en espanol                                 |
-| `src/services/data/static/site.en.json` | Datos estaticos en ingles                                  |
-| `src/components/schemas.ts`             | Schemas Zod de cada bloque + tipos del dominio             |
+| Archivo                                 | Rol                                              |
+| --------------------------------------- | ------------------------------------------------ |
+| `src/services/data/site.ts`             | Orquestador: valida y expone `getSiteData(lang)` |
+| `src/services/data/static/site.es.json` | Datos estaticos en espanol                       |
+| `src/services/data/static/site.en.json` | Datos estaticos en ingles                        |
+| `src/components/schemas.ts`             | Schemas Zod de cada bloque + tipos del dominio   |
 
 ## Validacion
 
-Todo payload pasa por Zod antes de llegar a un componente. Si un bloque
-no cumple el schema, `getSiteData` lanza un error con la key y el
-mensaje del problema: **falla ruidoso** en vez de renderizar datos
-rotos.
+El payload esta **tipado, no validado en runtime**. Los JSON se importan
+con `resolveJsonModule` y se asignan a `Record<string, SitePayload>`, asi
+que **TypeScript verifica la forma en compile-time**: si un bloque del
+JSON no cumple el tipo `SitePayload`, el build falla.
 
 ```ts
-const CONTENT_SCHEMAS = {
-  "section.hero": HeroContentSchema,
-  "section.pila": PilaContentSchema,
-} as const;
+const STATIC_PAYLOADS: Record<string, SitePayload> = {
+  en: en,
+  es: es,
+};
 ```
 
-La validacion es sincrona y local: no hay red ni cache. El payload ya
-esta en el bundle del servidor.
+Los schemas Zod de `src/components/schemas.ts` siguen existiendo, pero
+como **fuente de los tipos del dominio** (`z.infer`), no como validacion
+en runtime. La validacion en runtime solo tiene sentido cuando el dato
+viene de afuera (una API, un formulario): aca el dato es un archivo del
+repo, y si esta mal el error aparece al compilar.
+
+La validacion en runtime **si** se usa donde el dato entra del exterior:
+el valor que el usuario tipea en el modal de insercion, validado con
+`ValorPilaSchema` (ver `docs/structures/README.md`).
 
 ## Sin cache
 
@@ -80,29 +88,26 @@ cache no aporta nada y solo complica el debug.
 
 ## Agregar una sección nueva
 
-Agregar una seccion (por ejemplo `section.cola`) son 6 pasos en 5
+Agregar una seccion (por ejemplo `section.cola`) son 4 pasos en 4
 archivos:
 
-| #   | Archivo                                    | Que hacer                                                                                   |
-| --- | ------------------------------------------ | ------------------------------------------------------------------------------------------- |
-| 1   | `src/components/schemas.ts`                | Definir `ColaContentSchema` con Zod                                                         |
-| 2   | `src/components/schemas.ts`                | Exportar el tipo: `export type ColaContent = z.infer<typeof ColaContentSchema>`            |
-| 3   | `src/services/data/site.ts`                | Registrar la clave en `CONTENT_SCHEMAS`                                                     |
-| 4   | `src/services/data/site.ts`                | Ampliar el tipo `SiteContent` con la clave nueva                                            |
-| 5   | `src/app/page.tsx`                         | Leer `content["section.cola"]` y pasar las props al organism                               |
-| 6   | `src/components/organisms/ColaSection.tsx` | El organism, que compone sus molecules y atoms                                             |
+| #   | Archivo                                    | Que hacer                                                                       |
+| --- | ------------------------------------------ | ------------------------------------------------------------------------------- |
+| 1   | `src/components/schemas.ts`                | Definir `ColaContentSchema` con Zod                                             |
+| 2   | `src/components/schemas.ts`                | Exportar el tipo: `export type ColaContent = z.infer<typeof ColaContentSchema>` |
+| 3   | `src/services/data/site.ts`                | Ampliar el tipo `SiteContent` con la clave nueva                                |
+| 4   | `src/app/page.tsx`                         | Leer `content["section.cola"]` y pasar las props al organism                    |
+| 5   | `src/components/organisms/ColaSection.tsx` | El organism, que compone sus molecules y atoms                                  |
 
-Sin los pasos 3 y 4 el bloque **no se valida** contra el schema y no
-queda tipado: el payload pasaria sin validar contra ningun schema, y el
-error apareceria mas tarde y en otro lado.
+Sin el paso 3 el bloque no queda tipado: el acceso a
+`content["section.cola"]` seria un error de TypeScript.
 
 Los JSON estaticos tienen que incluir la clave nueva en `content` y en
-`metadata`, o el orquestador lanza `[site] Missing content for
-"section.cola"`.
+`metadata`: si falta, TypeScript marca el acceso a
+`content["section.cola"]` como error.
 
 Si la seccion tiene metadata, ademas hay que:
 
-- Registrar la clave en `METADATA_SCHEMAS`.
 - Ampliar `SiteMetadata`.
 - Agregar el schema de metadata en `schemas.ts`.
 

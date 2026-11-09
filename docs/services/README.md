@@ -1,4 +1,5 @@
 ---
+
 type: docs
 module: services
 status: active
@@ -41,15 +42,16 @@ en el componente.
 
 ## `data/site.ts`
 
-Orquestador de datos. Valida el payload contra los schemas de Zod y lo
-devuelve con la forma `SitePayload`. Es la unica fuente de datos de la
-app: ningun componente la consulta por su cuenta.
+Orquestador de datos. Devuelve el payload del idioma pedido, tipado como
+`SitePayload`. Es la unica fuente de datos de la app: ningun componente
+la consulta por su cuenta.
 
 ```ts
 const { content, metadata } = await getSiteData("es");
 ```
 
-Sin cache ni red: el origen es local.
+Sin cache ni red: el origen es local, y la forma del JSON la verifica
+TypeScript en compile-time (no hay validacion en runtime).
 
 ## `data-structures/pila.ts`
 
@@ -84,7 +86,11 @@ una entrada es lo que hace que aparezca en el menu.
 
 ```ts
 export const ESTRUCTURAS: EstructuraInfo[] = [
-  { id: "pila", label: "Pila", description: "Ultimo en entrar, primero en salir (LIFO)" },
+  {
+    id: "pila",
+    label: "Pila",
+    description: "Ultimo en entrar, primero en salir (LIFO)",
+  },
 ];
 ```
 

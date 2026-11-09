@@ -1,4 +1,5 @@
 ---
+
 type: decision
 status: active
 created: 2026-11-09
@@ -56,10 +57,10 @@ elemento agregado.
 
 ## Alternativas descartadas
 
-| Alternativa                      | Por que no                                                        |
-| -------------------------------- | ----------------------------------------------------------------- |
-| **CIMA base 0 (proxima libre)**  | Contradice el pseudocodigo de la catedra y desplaza el error de pila llena. |
-| **CIMA = valor del tope**         | Pierde la posicion: con dos pilas `[1,7]` y `[7,1]` la variable no las distingue. |
+| Alternativa                         | Por que no                                                                             |
+| ----------------------------------- | -------------------------------------------------------------------------------------- |
+| **CIMA base 0 (proxima libre)**     | Contradice el pseudocodigo de la catedra y desplaza el error de pila llena.            |
+| **CIMA = valor del tope**           | Pierde la posicion: con dos pilas `[1,7]` y `[7,1]` la variable no las distingue.      |
 | **Indice 1-based dentro del array** | Un array con `indice 0` sin usar es un desperdicio; la conversion va en un solo lugar. |
 
 ## Consecuencias

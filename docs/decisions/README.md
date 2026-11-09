@@ -1,4 +1,5 @@
 ---
+
 type: docs
 module: decisions
 status: active
@@ -42,6 +43,7 @@ Un documento mas, con frontmatter:
 
 ```md
 ---
+
 type: decision
 status: active
 created: 2026-11-09
@@ -51,9 +53,9 @@ tags: [decision, ...]
 
 ## Decisiones registradas
 
-| Documento                       | Decision                                                          |
-| ------------------------------- | ----------------------------------------------------------------- |
-| `package-manager-bun.md`        | Bun como package manager, Biome como linter, TypeScript estricto  |
+| Documento                        | Decision                                                          |
+| -------------------------------- | ----------------------------------------------------------------- |
+| `package-manager-bun.md`         | Bun como package manager, Biome como linter, TypeScript estricto  |
 | `datos-estaticos-sin-backend.md` | Datos locales en JSON, sin Supabase ni autenticacion              |
-| `logica-en-services.md`         | La logica de la estructura va en `services/`, no en el componente  |
-| `cima-base-uno.md`              | `CIMA` es base 1, igual que el pseudocodigo de la catedra        |
+| `logica-en-services.md`          | La logica de la estructura va en `services/`, no en el componente |
+| `cima-base-uno.md`               | `CIMA` es base 1, igual que el pseudocodigo de la catedra         |

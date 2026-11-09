@@ -18,13 +18,15 @@ export function LanguageSwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   const button_data = [
     { lang: "en", txt: "English" },
-    { lang: "es", txt: "Español" }
+    { lang: "es", txt: "Español" },
   ];
 
   return (
     <div className="relative">
       <Button
-        icon={<LucideLanguages className="size-5 text-foreground hover:text-primary" />}
+        icon={
+          <LucideLanguages className="size-5 text-foreground hover:text-primary" />
+        }
         buttonBody="size-7 z-50"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Elegir idioma"

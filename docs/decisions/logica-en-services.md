@@ -1,4 +1,5 @@
 ---
+
 type: decision
 status: active
 created: 2026-11-09
@@ -26,8 +27,8 @@ en codigo puro.** El componente solo la orquesta y la muestra.
 
 ```ts
 // src/services/data-structures/pila.ts
-export function meter(pila: Pila, valor: number): ResultadoOperacion<Pila>
-export function sacar(pila: Pila): ResultadoOperacion<{ pila, valor }>
+export function meter(pila: Pila, valor: number): ResultadoOperacion<Pila>;
+export function sacar(pila: Pila): ResultadoOperacion<{ pila; valor }>;
 ```
 
 Un service:
@@ -42,12 +43,12 @@ lanzan: el componente decide que hacer con cada caso.
 
 ## Alternativas descartadas
 
-| Alternativa                        | Por que no                                                        |
-| ---------------------------------- | ----------------------------------------------------------------- |
-| **Logica dentro del componente**   | Los casos limite (pila llena, pila vacia, valor invalido) solo se prueban a mano. |
-| **Clase `Pila` con metodos**        | El estado del componente es un objeto plano; una clase obliga a mezclar `this` con el estado de React. |
-| **Global mutable**                  | Dos componentes que compartan la pila se desincronizan. La inmutabilidad lo evita. |
-| **`useReducer` en el componente**   | El reducer tambien es codigo puro, pero vive en el archivo del componente: no se testea aislado ni se documenta como parte del dominio. |
+| Alternativa                       | Por que no                                                                                                                              |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **Logica dentro del componente**  | Los casos limite (pila llena, pila vacia, valor invalido) solo se prueban a mano.                                                       |
+| **Clase `Pila` con metodos**      | El estado del componente es un objeto plano; una clase obliga a mezclar `this` con el estado de React.                                  |
+| **Global mutable**                | Dos componentes que compartan la pila se desincronizan. La inmutabilidad lo evita.                                                      |
+| **`useReducer` en el componente** | El reducer tambien es codigo puro, pero vive en el archivo del componente: no se testea aislado ni se documenta como parte del dominio. |
 
 ## Consecuencias
 

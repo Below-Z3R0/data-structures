@@ -1,4 +1,5 @@
 ---
+
 type: decision
 status: active
 created: 2026-11-09
@@ -36,19 +37,20 @@ No hay variables de entorno: no hay `.env.local` que configurar.
 
 ## Alternativas descartadas
 
-| Alternativa                          | Por que no                                                   |
-| ------------------------------------ | ------------------------------------------------------------ |
-| **Supabase con contenido editable**  | El contenido es fijo por laassignment. Un CRUD es alcance extra. |
-| **Mantener el modo dual**            | Un switch con una sola rama posible es ruido: el codigo de la rama muerta no se prueba. |
-| **Hardcodear los textos en el JSX**  | Rompe el i18n (`?lang=`) y la convencion de contenido del template. Los textos van en el JSON. |
-| **`localStorage` para persistir**    | La pila es un ejercicio en memoria, no un estado a conservar entre recargas. |
+| Alternativa                         | Por que no                                                                                     |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **Supabase con contenido editable** | El contenido es fijo por laassignment. Un CRUD es alcance extra.                               |
+| **Mantener el modo dual**           | Un switch con una sola rama posible es ruido: el codigo de la rama muerta no se prueba.        |
+| **Hardcodear los textos en el JSX** | Rompe el i18n (`?lang=`) y la convencion de contenido del template. Los textos van en el JSON. |
+| **`localStorage` para persistir**   | La pila es un ejercicio en memoria, no un estado a conservar entre recargas.                   |
 
 ## Consecuencias
 
 - `getSiteData(lang)` es sincrono en su origen: no hay cache, ni red, ni
   invalidacion de tags.
-- Los schemas de Zod siguen validando el payload: un JSON mal editado
-  falla ruidoso con `[site] Invalid content for "section.pila": ...`.
+- La forma del JSON la verifica **TypeScript en compile-time**: si un
+  bloque no cumple `SitePayload`, el build falla. No hay validacion en
+  runtime: el dato es un archivo del repo, no una respuesta de red.
 - Agregar un idioma es duplicar el JSON y registrarlo en
   `STATIC_PAYLOADS`.
 - Los tests no necesitan mocks de red: el payload es un import.
