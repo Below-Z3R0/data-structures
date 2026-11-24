@@ -192,7 +192,8 @@ export function eliminar(
     return { ok: false, error: "COLA_VACIA" };
   }
 
-  const item = cola.celdas[cola.frente - 1] as number;
+  const item = cola.celdas[cola.frente - 1];
+  if (item == null) return { ok: false, error: "COLA_VACIA" };
   const celdas = [...cola.celdas];
   celdas[cola.frente - 1] = null;
 
