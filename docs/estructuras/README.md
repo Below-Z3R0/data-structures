@@ -173,7 +173,127 @@ z.number().int("El valor debe ser un numero entero").min(1).max(99);
 El mismo schema se usa en el service, asi que la logica nunca acepta un
 dato invalido aunque el service se use por otro camino.
 
-### Agregar una estructura nueva
+## La COLA (QUEUE)
+
+### Que es
+
+Estructura lineal **FIFO**: el primero que entra es el primero que sale. Se
+inserta por un extremo (`FINAL`) y se elimina por el otro (`FRENTE`).
+
+### Como se representa en memoria
+
+Arreglo **circular** de 6 celdas. `FRENTE` y `FINAL` son apuntadores en base 1
+que valen `0` cuando la cola esta vacia. Cuando un apuntador llega a `MAX`
+vuelve a `1`: no se corre el arreglo, se reutilizan las celdas liberadas al
+frente.
+
+```
+COLA   [ 30 | 40 | -- | -- | -- | 10 ]
+         1    2    3    4    5    6
+              ^                   ^
+           FRENTE               FINAL
+```
+
+En este ejemplo `FRENTE = 2`, `FINAL = 6`, `NE = 5` (2,3,4,5,6) y el proximo
+insert va a la celda 1, que es la que quedo libre.
+
+### Las nueve consideraciones
+
+| Situacion                   | Condicion                                           |
+| --------------------------- | --------------------------------------------------- |
+| COLA vacia                  | `FRENTE = FINAL = 0`                                |
+| Insertar el primer elemento | `FRENTE = FINAL = 1`                                |
+| Insertar un elemento        | `FINAL = FINAL + 1`                                 |
+| Eliminar un elemento        | `FRENTE = FRENTE + 1`                               |
+| Un solo elemento            | `FRENTE = FINAL ≠ 0`                                |
+| Eliminar el unico elemento  | `FRENTE = FINAL = 0`                                |
+| Insertar con `FINAL = MAX`  | `FINAL = 1`                                         |
+| Eliminar con `FRENTE = MAX` | `FRENTE = 1`                                        |
+| COLA llena                  | `(FRENTE = 1 y FINAL = MAX)` o `FRENTE = FINAL + 1` |
+
+### Los algoritmos
+
+**INSERTAR (INSERCOLA):**
+
+```
+si estaLlena         -> COLA_LLENA
+si FRENTE=0 y FINAL=0 -> FRENTE=1, FINAL=1
+sino si FINAL=MAX    -> FINAL=1
+sino                 -> FINAL++
+COLA[FINAL] = valor
+```
+
+**ELIMINAR (ELIMCOLA):**
+
+```
+si FRENTE=0 y FINAL=0 -> COLA_VACIA
+item = COLA[FRENTE]
+si FRENTE=FINAL      -> FRENTE=0, FINAL=0
+sino si FRENTE=MAX   -> FRENTE=1
+sino                 -> FRENTE++
+```
+
+**Conteo:**
+
+```
+NE = FRENTE <= FINAL ? FINAL - FRENTE + 1 : MAX + (FINAL - FRENTE + 1)
+EL = MAX - NE
+```
+
+Las dos ramas de `NE` importan: cuando la cola dio la vuelta, `FRENTE > FINAL`
+y el tramo se calcula sumando `MAX`.
+
+### En el codigo
+
+`src/app/estructuras/services/cola.ts`, mismas reglas que la pila: funciones
+puras, sin React ni DOM, con Zod validando la entrada.
+
+| Funcion                              | Que hace                                              |
+| ------------------------------------ | ----------------------------------------------------- |
+| `crearCola()`                        | 6 celdas en `null`, `FRENTE = FINAL = 0`              |
+| `insertar(cola, valor)`              | INSERCOLA con wrap de `FINAL`                         |
+| `eliminar(cola)`                     | ELIMCOLA con wrap de `FRENTE` y reset `0/0` al vaciar |
+| `editarCola(valores)`                | Reemplaza el contenido: `FRENTE = 1`, `FINAL = n`     |
+| `regresar(historial)`                | Deshacer, igual que en la pila                        |
+| `numeroElementos` / `espaciosLibres` | `NE` y `EL`                                           |
+| `valorFrente` / `valorFinal`         | Extremos, `null` si esta vacia                        |
+| `valoresCola(cola)`                  | Recorre de `FRENTE` a `FINAL` salvando el corte       |
+
+### Los errores
+
+| Codigo              | Cuando                           |
+| ------------------- | -------------------------------- |
+| `COLA_LLENA`        | Insertar con la cola llena       |
+| `COLA_VACIA`        | Eliminar de una cola vacia       |
+| `VALOR_INVALIDO`    | Valor fuera de 1..99 o no entero |
+| `CANTIDAD_INVALIDA` | "Editar" con mas de 6 valores    |
+| `sin_historial`     | "Regresar" sin estados guardados |
+
+### El flujo en la UI
+
+`ColaSection` es el organismo dueño del estado; `ColaVisualizer` dibuja las
+celdas y el panel; `ColaCell` es una celda con sus badges.
+
+```
+ColaSection (client)
+  |  useState: cola, historial, modalAbierto, errorMensaje, valorInsercion, valoresEdicion
+  |  llama a services/cola.ts (funciones puras)
+  +-> ColaVisualizer
+  |     +-> ColaCell x6  (badge FRENTE y/o FINAL arriba de la celda)
+  +-> Modal x4  (insertar / eliminar / editar / error)
+```
+
+**El panel de estado siempre esta visible:** `FRENTE`, `FINAL`, `MAX`,
+`ELEMENTOS` (NE) y `LIBRES` (EL), mas el badge `COLA VACIA` / `COLA LLENA`.
+
+**Una celda ocupada no es lo mismo que una celda con valor.** Despues de un
+wrap, una celda con `null` puede estar _dentro_ del rango `FRENTE..FINAL`
+(por ejemplo si se elimino ese elemento pero el apuntador aun no paso). El
+visualizador no usa `!== null` para pintar: calcula el conjunto de posiciones
+ocupadas recorriendo `NE` posiciones desde `FRENTE`, con la misma logica que
+`valoresCola`.
+
+## Agregar una estructura nueva
 
 El menu se alimenta del payload, no de `registro.ts`: `page.tsx` pasa
 `metadata["section.hero"].estructuras` a `EstructurasContainer`, que

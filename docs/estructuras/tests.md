@@ -133,3 +133,95 @@ Estos casos no tienen test y son candidatos para el módulo de tests:
 - Un test por rama del código, no por línea.
 - Si un test documenta un bug conocido, el nombre lo dice (`BUG-N`) y se
   **invierte** cuando el bug se arregla.
+
+---
+
+## COLA — `cola.test.ts` (28 tests)
+
+Todo lo de arriba aplica igual. La diferencia es **el wrap-around**: la mitad
+de estos tests existen para verificar que la cola reaprovecha las celdas
+liberadas en lugar de correrse.
+
+### `crearCola` (1)
+
+| Test                                                   | Qué fija                                |
+| ------------------------------------------------------ | --------------------------------------- |
+| `arranca vacia: FRENTE = FINAL = 0 y 6 celdas en null` | El estado inicial del arreglo circular. |
+
+### `insertar` (7)
+
+| Test                                                     | Qué fija                                                         |
+| -------------------------------------------------------- | ---------------------------------------------------------------- |
+| `el primer elemento deja FRENTE = FINAL = 1`             | Consideración (b): el primer insert mueve los dos apuntadores.   |
+| `el segundo elemento mueve FINAL a 2 y deja FRENTE en 1` | `FRENTE` no se mueve al insertar.                                |
+| `se llena con 6 elementos y el 7 falla con COLA_LLENA`   | `(FRENTE=1, FINAL=MAX)`.                                         |
+| **`WRAP DE FINAL`**                                      | Con `FINAL = MAX` y lugar libre, el insert reinicia `FINAL = 1`. |
+| `rechaza valores fuera del rango 1-99 o no enteros`      | `0`, `100`, `-3`, `4.5`.                                         |
+| `no muta la cola original`                               | Inmutabilidad.                                                   |
+
+### `eliminar` (5)
+
+| Test                                                   | Qué fija                                    |
+| ------------------------------------------------------ | ------------------------------------------- |
+| `saca el valor del FRENTE (FIFO) y avanza FRENTE`      | El opuesto exacto de `meter` en la pila.    |
+| `respeta el orden FIFO: de [1,2,3] sale 1 y despues 2` | Orden de salida.                            |
+| `al sacar el unico elemento deja FRENTE = FINAL = 0`   | Consideración (f).                          |
+| `falla con COLA_VACIA`                                 | Eliminar de vacía.                          |
+| **`WRAP DE FRENTE`**                                   | Con `FRENTE = MAX` el siguiente avanza a 1. |
+
+### `conteo` (5)
+
+| Test                                       | Qué fija                                                         |
+| ------------------------------------------ | ---------------------------------------------------------------- |
+| `estaLlena con FRENTE = 1 y FINAL = MAX`   | Primera forma de llena.                                          |
+| `estaLlena con FRENTE = FINAL + 1`         | Segunda forma de llena.                                          |
+| `NE con FRENTE <= FINAL`                   | La rama sin vuelta.                                              |
+| **`NE con FRENTE > FINAL`**                | `MAX + (FINAL - FRENTE + 1)`. Es donde más se equivoca la gente. |
+| `EL = MAX - NE` en vacía, a medias y llena | Los tres estados.                                                |
+
+### `extremos` (3)
+
+| Test                                                           | Qué fija |
+| -------------------------------------------------------------- | -------- |
+| `devuelven null en una cola vacia`                             |          |
+| `devuelven los valores correctos con la cola a medias`         |          |
+| `devuelven los extremos correctos cuando la cola da la vuelta` |          |
+
+### `valoresCola` (2)
+
+| Test                                                          | Qué fija                                                           |
+| ------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `sin vuelta devuelve el orden de insercion`                   |                                                                    |
+| **`con vuelta devuelve el orden correcto cruzando el corte`** | Recorre `NE` posiciones desde `FRENTE` salvando el corte en `MAX`. |
+
+### `editarCola` (4)
+
+| Test                                                         | Qué fija        |
+| ------------------------------------------------------------ | --------------- |
+| `reemplaza el contenido y recalcula FRENTE = 1, FINAL = n`   |                 |
+| `una lista vacia deja FRENTE = FINAL = 0 (no es error)`      | Vaciar ≠ error. |
+| `falla con CANTIDAD_INVALIDA si excede 6`                    |                 |
+| `falla con VALOR_INVALIDO si algun valor no cumple el rango` |                 |
+
+### `regresar` (2)
+
+| Test                                                 | Qué fija |
+| ---------------------------------------------------- | -------- |
+| `devuelve el estado anterior y consume el historial` |          |
+| `falla con sin_historial si el historial esta vacio` |          |
+
+### Los tres que atrapan el wrap
+
+`WRAP DE FINAL`, `NE con FRENTE > FINAL` y `valoresCola con vuelta`. Si los
+tres pasan pero el escenario no cruza el corte, el test no prueba nada: cada
+uno arma el estado con operaciones reales y afirma los apuntadores
+resultantes (`FINAL = 1` con `FRENTE = 2`, `FRENTE = MAX` con `FINAL = 1`).
+
+---
+
+## Cobertura de la UI
+
+No hay tests de componentes. La UI es una capa fina sobre los servicios, y se
+verifica en el browser: insertar, eliminar, regresar, editar, los dos idiomas
+y el panel de estado. Si aparecen bugs de interacción, el primer paso es
+escribir el test de la función pura que falla, no el del componente.

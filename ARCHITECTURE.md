@@ -11,8 +11,8 @@ App web interactiva para visualizar estructuras de datos lineales estáticas en
 el navegador. Cada estructura se opera con los botones de la pantalla y el
 arreglo de memoria se actualiza en tiempo real con sus variables de control.
 
-**Estructuras implementadas:** PILA (LIFO, con `CIMA`).
-**En desarrollo:** COLA (circular, con `FRENTE` y `FINAL`).
+**Estructuras implementadas:** PILA (LIFO, con `CIMA`) y COLA (circular, con
+`FRENTE` y `FINAL`).
 
 **No tiene backend.** No hay Supabase, ni autenticación, ni base de datos, ni
 API. Todo el estado vive en el navegador y todos los textos son JSON estáticos
@@ -54,12 +54,17 @@ src/
 │       ├── components/
 │       │   ├── EstructurasHero.tsx        # cabecera: títulos + controles de idioma y tema + menú
 │       │   ├── EstructuraMenu.tsx         # botones Pila | Cola (radiogroup)
-│       │   ├── PilaSection.tsx            # organismo: dueño del estado de la pila y de los modales
+│       │   ├── PilaSection.tsx            # organismo: estado de la pila y sus modales
 │       │   ├── PilaVisualizer.tsx         # arreglo de 6 celdas + panel de estado
-│       │   └── PilaCell.tsx               # una celda: índice, valor, flecha de CIMA
+│       │   ├── PilaCell.tsx               # una celda: índice, valor, flecha de CIMA
+│       │   ├── ColaSection.tsx            # organismo: estado de la cola y sus modales
+│       │   ├── ColaVisualizer.tsx         # arreglo circular + FRENTE/FINAL/MAX/NE/EL
+│       │   └── ColaCell.tsx               # una celda con badges FRENTE y FINAL
 │       ├── services/
 │       │   ├── pila.ts                    # lógica pura de la PILA. Sin React, sin DOM.
-│       │   ├── pila.test.ts               # 17 tests
+│       │   ├── pila.test.ts               # 18 tests
+│       │   ├── cola.ts                    # lógica pura de la COLA circular
+│       │   ├── cola.test.ts               # 28 tests
 │       │   └── registro.ts                # EstructuraId, ESTRUCTURA_IDS, ESTRUCTURAS
 │       ├── schemas.ts                     # contratos Zod + tipos inferidos
 │       └── types.ts                       # contratos de UI del dominio
@@ -147,9 +152,11 @@ importa un Client Component a través del barrel recibe `undefined` y rompe con
 | Si querés cambiar…                                    | Archivo                                                           |
 | ----------------------------------------------------- | ----------------------------------------------------------------- |
 | La lógica de la pila (meter, sacar, editar, regresar) | `app/estructuras/services/pila.ts`                                |
-| Los errores de la estructura                          | `ErrorPila` en `services/pila.ts` + `errors` en los JSON          |
+| La lógica de la cola (insertar, eliminar, NE, EL)     | `app/estructuras/services/cola.ts`                                |
+| Los errores de la estructura                          | `ErrorPila` / `ErrorCola` + `errors` en los JSON                  |
 | El arreglo de celdas y la flecha de CIMA              | `components/PilaCell.tsx`, `PilaVisualizer.tsx`                   |
-| Los botones de operación                              | `components/PilaSection.tsx`                                      |
+| El arreglo circular y los punteros FRENTE/FINAL       | `components/ColaCell.tsx`, `ColaVisualizer.tsx`                   |
+| Los botones de operación                              | `components/PilaSection.tsx`, `ColaSection.tsx`                   |
 | El menú entre estructuras                             | `components/EstructuraMenu.tsx`                                   |
 | Agregar una estructura nueva                          | ver "Receta" abajo                                                |
 | Un texto de la pantalla                               | `services/data/static/site.{es,en}.json`                          |
@@ -211,8 +218,9 @@ cuatro en verde.
 
 ## Estado actual del desarrollo
 
-Ver `docs/plans/plan.md`. Resumen: M1 (arquitectura) cerrado; M1b (cierre de los
-5 ALTOS del `bugs.md`) encargo listo; M2 (COLA) pendiente; M3 (docs) en curso.
+PILA y COLA implementadas y verificadas en el browser, con 46 tests verdes.
 
 Los hallazgos abiertos están en `docs/estructuras/bugs.md` con su severidad e
-ID. Ningún módulo se considera cerrado con ALTOS abiertos.
+ID. Queda deuda de accesibilidad (C1, C3), el cast de C2 y la simplificación
+de `PilaSection` / `ColaSection`, que hoy comparten la forma pero no el código.
+Ningún módulo se considera cerrado con ALTOS abiertos.

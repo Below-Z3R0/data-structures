@@ -14,7 +14,7 @@ docs/
   motion/            <- animaciones con motion (LazyMotion, variantes)
   data/              <- contrato de datos y modo estatico
   components/        <- atomic design: atoms, molecules, organisms
-  structures/        <- las estructuras de datos (PILA) y su modelo
+  estructuras/       <- las estructuras de datos (PILA y COLA) y su modelo
   services/          <- capa de servicios (datos, logica de estructuras)
   decisions/         <- decisiones tecnicas y por que se tomaron
   i18n/              <- idioma: como se elige y como se traduce
@@ -22,27 +22,27 @@ docs/
 
 ## Los modulos
 
-| Modulo       | Que documenta                                                        |
-| ------------ | -------------------------------------------------------------------- |
-| `structures` | La PILA: modelo en memoria, algoritmos, errores y el flujo de la UI  |
-| `theming`    | Las 4 paletas, los tokens y **como agregar una paleta nueva**        |
-| `motion`     | Las primitivas de animacion y las reglas de `LazyMotion`             |
-| `data`       | El contrato `content`/`metadata` y el origen estatico                |
-| `components` | Atomic design: los tres niveles y como agregar un componente         |
-| `services`   | La capa de servicios: datos estaticos y logica de estructuras        |
-| `decisions`  | Las decisiones tecnicas con contexto y alternativas descartadas      |
-| `i18n`       | El idioma por query param, los datos por idioma y el tipo `Language` |
+| Modulo        | Que documenta                                                              |
+| ------------- | -------------------------------------------------------------------------- |
+| `estructuras` | La PILA y la COLA: modelo en memoria, algoritmos, errores y flujo de la UI |
+| `theming`     | Las 4 paletas, los tokens y **como agregar una paleta nueva**              |
+| `motion`      | Las primitivas de animacion y las reglas de `LazyMotion`                   |
+| `data`        | El contrato `content`/`metadata` y el origen estatico                      |
+| `components`  | Atomic design: los tres niveles y como agregar un componente               |
+| `services`    | La capa de servicios: datos estaticos y logica de estructuras              |
+| `decisions`   | Las decisiones tecnicas con contexto y alternativas descartadas            |
+| `i18n`        | El idioma por query param, los datos por idioma y el tipo `Language`       |
 
 ## Donde empezar
 
 | Si queres...                    | Lee                                 |
 | ------------------------------- | ----------------------------------- |
 | Levantar el proyecto            | `README.md` de la raiz del proyecto |
-| Entender la PILA                | `estructuras/README.md`             |
+| Entender la PILA o la COLA      | `estructuras/README.md`             |
 | Agregar una paleta              | `theming/paleta-nueva.md`           |
 | Entender por que Bun y no pnpm  | `decisions/package-manager-bun.md`  |
 | Agregar un idioma               | `i18n/README.md`                    |
-| Agregar una estructura de datos | `estructuras/README.md`             |
+| Agregar una estructura de datos | `estructuras/README.md` (receta)    |
 | Agregar un componente           | `components/README.md`              |
 
 ## Convenciones
@@ -62,7 +62,7 @@ docs/
 ## Otros proyectos
 
 Este proyecto forma parte de un conjunto de estructuras de datos que se
-van a ir implementando: Pila es la primera, y la idea es ir agregando
+van a ir implementando: Pila y Cola son las primeras, y la idea es ir agregando
 Cola, Lista, Arbol y demas para poder visualizarlas y probarlas en el
 navegador.
 
