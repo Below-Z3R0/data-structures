@@ -1,7 +1,7 @@
 # Arquitectura
 
 > Mapa del proyecto: dónde está cada cosa y qué se rompe si la movés.
-> Para el *por qué* de las decisiones, ver `docs/decisions/`.
+> Para el _por qué_ de las decisiones, ver `docs/decisions/`.
 
 ---
 
@@ -22,18 +22,18 @@ incluidos en el bundle.
 
 ## Stack
 
-| Capa | Tecnología |
-|---|---|
-| Runtime y paquetes | Bun |
-| Framework | Next.js 16.4.5 (App Router, Turbopack) |
-| UI | React 19.3.1 |
-| Lenguaje | TypeScript 7.0.2 (estricto) |
-| Estilos | Tailwind v4 con `@theme` en `globals.css` |
-| Animaciones | Motion 14.10.1 con `LazyMotion` + `domAnimation` |
-| Validación | Zod 4.6.7 |
-| Iconos | `lucide-react` |
-| Lint y formato | Biome 2.6.6 (no ESLint, no Prettier) |
-| Tests | Vitest 5.1.0 |
+| Capa               | Tecnología                                       |
+| ------------------ | ------------------------------------------------ |
+| Runtime y paquetes | Bun                                              |
+| Framework          | Next.js 16.4.5 (App Router, Turbopack)           |
+| UI                 | React 19.3.1                                     |
+| Lenguaje           | TypeScript 7.0.2 (estricto)                      |
+| Estilos            | Tailwind v4 con `@theme` en `globals.css`        |
+| Animaciones        | Motion 14.10.1 con `LazyMotion` + `domAnimation` |
+| Validación         | Zod 4.6.7                                        |
+| Iconos             | `lucide-react`                                   |
+| Lint y formato     | Biome 2.6.6 (no ESLint, no Prettier)             |
+| Tests              | Vitest 5.1.0                                     |
 
 ---
 
@@ -122,18 +122,18 @@ montar nada. Todo componente que necesite operar llama a ese servicio.
 
 ## Server vs Client
 
-| Componente | Tipo | Por qué |
-|---|---|---|
-| `app/page.tsx` | Server | pide datos, no tiene estado |
-| `app/layout.tsx` | Server | metadatos y fuentes |
-| `app/estructuras/containers/EstructurasContainer.tsx` | Client | dueño de `activa` |
-| `EstructurasHero`, `EstructuraMenu` | Client | eventos y menú |
-| `PilaSection` | Client | estado de la pila y modales |
-| `PilaVisualizer` | Client **por importación** | lo renderiza `PilaSection`; no lleva `"use client"` propio |
-| `PilaCell` | Client | `AnimatePresence` |
-| `Modal`, `FieldInput`, `ThemeSwitcher`, `LanguageSwitcher` | Client | eventos |
-| `ErrorPage` | Server | no usa hooks |
-| atoms de texto (`Title1-4`, `Span`, `Paragraph`) | Server | presentacionales |
+| Componente                                                 | Tipo                       | Por qué                                                    |
+| ---------------------------------------------------------- | -------------------------- | ---------------------------------------------------------- |
+| `app/page.tsx`                                             | Server                     | pide datos, no tiene estado                                |
+| `app/layout.tsx`                                           | Server                     | metadatos y fuentes                                        |
+| `app/estructuras/containers/EstructurasContainer.tsx`      | Client                     | dueño de `activa`                                          |
+| `EstructurasHero`, `EstructuraMenu`                        | Client                     | eventos y menú                                             |
+| `PilaSection`                                              | Client                     | estado de la pila y modales                                |
+| `PilaVisualizer`                                           | Client **por importación** | lo renderiza `PilaSection`; no lleva `"use client"` propio |
+| `PilaCell`                                                 | Client                     | `AnimatePresence`                                          |
+| `Modal`, `FieldInput`, `ThemeSwitcher`, `LanguageSwitcher` | Client                     | eventos                                                    |
+| `ErrorPage`                                                | Server                     | no usa hooks                                               |
+| atoms de texto (`Title1-4`, `Span`, `Paragraph`)           | Server                     | presentacionales                                           |
 
 **Trampa conocida:** los Client Components se importan **directo del archivo**,
 nunca desde el barrel `components.ts`. Con Turbopack, un Server Component que
@@ -144,18 +144,18 @@ importa un Client Component a través del barrel recibe `undefined` y rompe con
 
 ## Dónde buscar
 
-| Si querés cambiar… | Archivo |
-|---|---|
-| La lógica de la pila (meter, sacar, editar, regresar) | `app/estructuras/services/pila.ts` |
-| Los errores de la estructura | `ErrorPila` en `services/pila.ts` + `errors` en los JSON |
-| El arreglo de celdas y la flecha de CIMA | `components/PilaCell.tsx`, `PilaVisualizer.tsx` |
-| Los botones de operación | `components/PilaSection.tsx` |
-| El menú entre estructuras | `components/EstructuraMenu.tsx` |
-| Agregar una estructura nueva | ver "Receta" abajo |
-| Un texto de la pantalla | `services/data/static/site.{es,en}.json` |
-| Un color o paleta | `app/globals.css` (36 variables × 4 paletas) |
-| El idioma por defecto | `services/data/site.ts` (`DEFAULT_LANG`) |
-| Una animación | `components/animations/Animations.tsx` o el componente que la usa |
+| Si querés cambiar…                                    | Archivo                                                           |
+| ----------------------------------------------------- | ----------------------------------------------------------------- |
+| La lógica de la pila (meter, sacar, editar, regresar) | `app/estructuras/services/pila.ts`                                |
+| Los errores de la estructura                          | `ErrorPila` en `services/pila.ts` + `errors` en los JSON          |
+| El arreglo de celdas y la flecha de CIMA              | `components/PilaCell.tsx`, `PilaVisualizer.tsx`                   |
+| Los botones de operación                              | `components/PilaSection.tsx`                                      |
+| El menú entre estructuras                             | `components/EstructuraMenu.tsx`                                   |
+| Agregar una estructura nueva                          | ver "Receta" abajo                                                |
+| Un texto de la pantalla                               | `services/data/static/site.{es,en}.json`                          |
+| Un color o paleta                                     | `app/globals.css` (36 variables × 4 paletas)                      |
+| El idioma por defecto                                 | `services/data/site.ts` (`DEFAULT_LANG`)                          |
+| Una animación                                         | `components/animations/Animations.tsx` o el componente que la usa |
 
 ### Receta: agregar una estructura nueva
 
