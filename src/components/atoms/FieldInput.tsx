@@ -1,6 +1,6 @@
 "use client";
 
-import type { PilaInputProps } from "../types";
+import type { HTMLInputTypeAttribute } from "react";
 
 /**
  * Campo de formulario con label e input.
@@ -8,8 +8,11 @@ import type { PilaInputProps } from "../types";
  * El error de validacion no se muestra aca: segun el flujo de la app, un
  * valor invalido dispara un modal de error, no un mensaje inline. Asi el
  * input queda limpio y el feedback es unico.
+ *
+ * Los props van declarados aca: el campo es UI compartida y no depende de
+ * los contratos del dominio de estructuras.
  */
-export function PilaInput({
+export function FieldInput({
   id,
   label,
   placeholder,
@@ -17,7 +20,15 @@ export function PilaInput({
   value,
   onChange,
   onSubmit,
-}: PilaInputProps) {
+}: {
+  id: string;
+  label: string;
+  placeholder?: string;
+  type?: HTMLInputTypeAttribute;
+  value: string;
+  onChange: (value: string) => void;
+  onSubmit?: () => void;
+}) {
   return (
     <div className="flex flex-col gap-2 w-full">
       <label htmlFor={id} className="text-sm font-medium text-muted-foreground">

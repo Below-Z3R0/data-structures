@@ -1,4 +1,10 @@
-import type { TitleProps } from "../types";
+/**
+ * Contrato de los titulos: el texto y las clases extra del consumidor.
+ */
+export type TitleProps = {
+  txt: string | undefined;
+  className?: string;
+};
 
 export function Title1({ txt, className }: TitleProps) {
   return (

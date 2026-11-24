@@ -4,7 +4,11 @@
       "title": "Data structures",
       "subtitle": "Stacks",
       "eyebrow": "Interactive practice",
-      "paragraph": "A stack is a linear LIFO structure: the last element in is the first element out. Explore its behaviour, push values and watch how the array and the CIMA variable change."
+      "paragraph": "A stack is a linear LIFO structure: the last element in is the first element out. Explore its behaviour, push values and watch how the array and the CIMA variable change.",
+      "labels": {
+        "idioma": "Choose language",
+        "paleta": "Choose palette"
+      }
     },
     "section.pila": {
       "title": "Stack",
@@ -42,15 +46,61 @@
         "CANTIDAD_INVALIDA": "The stack cannot hold more than 6 elements.",
         "sin_historial": "There is no previous state to go back to."
       }
+    },
+    "section.cola": {
+      "title": "Queue",
+      "paragraph": "A queue is a linear FIFO structure: the first element in is the first element out. Insert values and watch how FRONT and REAR move through the circular array.",
+      "labels": {
+        "frente": "FRONT",
+        "final": "REAR",
+        "max": "MAX",
+        "elementos": "ELEMENTS",
+        "libres": "FREE",
+        "vacia": "QUEUE EMPTY",
+        "llena": "QUEUE FULL",
+        "indice": "Index"
+      },
+      "buttons": {
+        "insertar": "Insert",
+        "eliminar": "Remove",
+        "regresar": "Undo",
+        "editar": "Edit"
+      },
+      "modal": {
+        "insertar_titulo": "Insert a value",
+        "insertar_label": "Number to insert",
+        "insertar_placeholder": "e.g. 42",
+        "eliminar_titulo": "Confirm removal",
+        "eliminar_mensaje": "Are you sure you want to remove the value at the front?",
+        "editar_titulo": "Edit the queue contents",
+        "editar_label": "Values separated by comma",
+        "editar_placeholder": "e.g. 5, 12, 30",
+        "cancelar": "Cancel",
+        "confirmar": "Confirm",
+        "aceptar": "Accept"
+      },
+      "errors": {
+        "COLA_LLENA": "The queue is full: no more elements can be inserted.",
+        "COLA_VACIA": "The queue is empty: there is nothing to remove.",
+        "VALOR_INVALIDO": "The value must be an integer between 1 and 99.",
+        "CANTIDAD_INVALIDA": "The queue cannot hold more than 6 elements.",
+        "sin_historial": "There is no previous state to go back to."
+      }
     }
   },
   "metadata": {
     "section.hero": {
+      "menu_label": "Data structures",
       "estructuras": [
         {
           "id": "pila",
           "label": "Stack",
           "description": "Last in, first out (LIFO)"
+        },
+        {
+          "id": "cola",
+          "label": "Queue",
+          "description": "First in, first out (FIFO)"
         }
       ]
     }

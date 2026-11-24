@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, m } from "motion/react";
-import type { PilaCellProps } from "../types";
+import type { PilaCellProps } from "@/app/estructuras/types";
 
 /**
  * Celda del arreglo PILA en la representacion grafica.

@@ -1,58 +1,42 @@
-import type {
-  HeroContent,
-  HeroMetadata,
-  PilaContent,
-} from "@/components/schemas";
+import { z } from "zod";
+import {
+  ColaContentSchema,
+  HeroContentSchema,
+  HeroMetadataSchema,
+  PilaContentSchema,
+} from "@/app/estructuras/schemas";
 import en from "./static/site.en.json";
 import es from "./static/site.es.json";
 
-// =============================================================================
-// CONTRATO DE DATOS
-// =============================================================================
-// El sitio se alimenta de un unico payload con dos mapas:
-//   - content:  textos traducibles, indexados por "section.<x>"
-//   - metadata: datos no traducibles, con las mismas keys
-//
-// El origen es ESTATICO: los JSON de ./static/. No hay Supabase, ni
-// credenciales, ni variables de entorno. El switch DATA_SOURCE del
-// template desaparece porque solo hay una fuente posible.
-// =============================================================================
+const SiteContentSchema = z.object({
+  "section.hero": HeroContentSchema,
+  "section.pila": PilaContentSchema,
+  "section.cola": ColaContentSchema,
+});
 
-export type SiteContent = {
-  "section.hero": HeroContent;
-  "section.pila": PilaContent;
-};
+const SiteMetadataSchema = z.object({
+  "section.hero": HeroMetadataSchema,
+});
 
-export type SiteMetadata = {
-  "section.hero": HeroMetadata;
-};
+const SitePayloadSchema = z.object({
+  content: SiteContentSchema,
+  metadata: SiteMetadataSchema,
+});
 
-export type SitePayload = {
-  content: SiteContent;
-  metadata: SiteMetadata;
-};
+export type SiteContent = z.infer<typeof SiteContentSchema>;
+export type SiteMetadata = z.infer<typeof SiteMetadataSchema>;
+export type SitePayload = z.infer<typeof SitePayloadSchema>;
 
-// =============================================================================
-// FUENTE DE DATOS
-// =============================================================================
-
-/** Payloads estaticos, indexados por idioma. */
+/** Payloads estaticos por idioma, validados una vez al cargar el modulo. */
 const STATIC_PAYLOADS: Record<string, SitePayload> = {
-  en: en,
-  es: es,
+  en: SitePayloadSchema.parse(en),
+  es: SitePayloadSchema.parse(es),
 };
 
 const DEFAULT_LANG = "es";
 
-/**
- * Devuelve el payload del sitio para el idioma pedido.
- *
- * Los datos son locales (JSON estaticos), no hay red ni cache: el
- * payload es chico y ya esta en el bundle del servidor.
- */
+/** Devuelve el payload del idioma pedido; cae a es si no existe. */
 export const getSiteData = async (
   lang: string = DEFAULT_LANG,
-): Promise<SitePayload> => {
-  const payload = STATIC_PAYLOADS[lang] ?? STATIC_PAYLOADS[DEFAULT_LANG];
-  return payload;
-};
+): Promise<SitePayload> =>
+  STATIC_PAYLOADS[lang] ?? STATIC_PAYLOADS[DEFAULT_LANG];

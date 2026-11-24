@@ -3,6 +3,7 @@
 import { AlertTriangle, Pencil, Plus, RotateCcw, Trash2 } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
 import { useState } from "react";
+import { PilaVisualizer } from "@/app/estructuras/components/PilaVisualizer";
 import {
   crearPila,
   type ErrorPila,
@@ -14,9 +15,12 @@ import {
   regresar,
   sacar,
   valoresPila,
-} from "@/services/data-structures/pila";
-import { Button, Modal, PilaInput, PilaVisualizer } from "../components";
-import type { PilaViewData } from "../types";
+} from "@/app/estructuras/services/pila";
+import type { PilaViewData } from "@/app/estructuras/types";
+import { Button } from "@/components/atoms/Button";
+import { FieldInput } from "@/components/atoms/FieldInput";
+import { Title2 } from "@/components/atoms/Title2";
+import { Modal } from "@/components/molecules/Modal";
 
 /** Modales posibles de la seccion de pila. */
 type ModalPila = "insertar" | "eliminar" | "editar" | "error" | null;
@@ -26,11 +30,11 @@ type ModalPila = "insertar" | "eliminar" | "editar" | "error" | null;
  *
  * Es la hoja con estado: guarda el contenido de la pila, el historial
  * para "Regresar" y el modal abierto. Toda la logica de la estructura
- * vive en `@/services/data-structures/pila`; este componente solo la
+ * vive en `@/app/estructuras/services/pila`; este componente solo la
  * orquesta y la muestra.
  */
 export function PilaSection({ data }: { data: PilaViewData }) {
-  const { labels, buttons, modal: modalText, errors } = data;
+  const { title, paragraph, labels, buttons, modal: modalText, errors } = data;
 
   const [pila, setPila] = useState<Pila>(crearPila);
   const [historial, setHistorial] = useState<HistorialPila>({ estados: [] });
@@ -49,10 +53,8 @@ export function PilaSection({ data }: { data: PilaViewData }) {
   };
 
   /** Muestra el modal de error con el mensaje del codigo de error. */
-  const mostrarError = (error: ErrorPila | "sin_historial") => {
-    setErrorMensaje(
-      error === "sin_historial" ? errors.sin_historial : errors[error],
-    );
+  const mostrarError = (error: ErrorPila) => {
+    setErrorMensaje(errors[error]);
     setModalAbierto("error");
   };
 
@@ -126,7 +128,7 @@ export function PilaSection({ data }: { data: PilaViewData }) {
   const handleRegresar = () => {
     const resultado = regresar(historial);
     if (!resultado.ok) {
-      mostrarError("sin_historial");
+      mostrarError(resultado.error);
       return;
     }
 
@@ -142,6 +144,14 @@ export function PilaSection({ data }: { data: PilaViewData }) {
 
   return (
     <div className="flex flex-col gap-10 w-full">
+      {/* Titulo y bajada de la seccion */}
+      <div className="flex flex-col gap-3">
+        <Title2 txt={title} />
+        <p className="max-w-2xl text-lg leading-relaxed text-muted-foreground text-left">
+          {paragraph}
+        </p>
+      </div>
+
       {/* Representacion grafica de la pila */}
       <PilaVisualizer pila={pila} labels={labels} />
 
@@ -206,7 +216,7 @@ export function PilaSection({ data }: { data: PilaViewData }) {
           </>
         }
       >
-        <PilaInput
+        <FieldInput
           id="valor-insercion"
           label={modalText.insertar_label}
           placeholder={modalText.insertar_placeholder}
@@ -265,7 +275,7 @@ export function PilaSection({ data }: { data: PilaViewData }) {
           </>
         }
       >
-        <PilaInput
+        <FieldInput
           id="valores-edicion"
           label={modalText.editar_label}
           placeholder={modalText.editar_placeholder}

@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Estructuras de datos — Pilas",
+  title: "Estructuras de datos",
   description:
-    "Practica interactiva de estructuras de datos: pila (LIFO) con representacion grafica en memoria y la variable CIMA.",
+    "Practica interactiva de estructuras de datos: pila (LIFO) y cola circular (FIFO) con representacion grafica en memoria.",
 };
 
 /**

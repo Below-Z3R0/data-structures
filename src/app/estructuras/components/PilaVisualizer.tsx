@@ -1,13 +1,11 @@
+import { PilaCell } from "@/app/estructuras/components/PilaCell";
 import {
   estaLlena,
   estaVacia,
   type Pila,
   TAMAANO_PILA,
-} from "@/services/data-structures/pila";
-// PilaCell es un Client Component: se importa directo del archivo, no del
-// barrel (bug de Turbopack con barrels que mezclan client y server).
-import { PilaCell } from "../atoms/PilaCell";
-import type { PilaLabels } from "../types";
+} from "@/app/estructuras/services/pila";
+import type { PilaLabels } from "@/app/estructuras/types";
 
 /**
  * Identidad estable de cada celda del arreglo.

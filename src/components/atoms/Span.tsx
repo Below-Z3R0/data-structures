@@ -1,4 +1,15 @@
-import type { SpanProps } from "../types";
+import type { ReactNode } from "react";
+
+/**
+ * Contrato del span: texto, contenido y atributos de accesibilidad.
+ */
+export interface SpanProps {
+  txt: string | undefined;
+  className?: string;
+  children?: ReactNode;
+  id?: string;
+  role?: string;
+}
 
 export function Span({ txt, className, children, role, id }: SpanProps) {
   return (

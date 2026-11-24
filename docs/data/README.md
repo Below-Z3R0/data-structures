@@ -54,7 +54,7 @@ payload es la misma en ambos: lo que cambia es el idioma, no la forma.
 | `src/services/data/site.ts`             | Orquestador: valida y expone `getSiteData(lang)` |
 | `src/services/data/static/site.es.json` | Datos estaticos en espanol                       |
 | `src/services/data/static/site.en.json` | Datos estaticos en ingles                        |
-| `src/components/schemas.ts`             | Schemas Zod de cada bloque + tipos del dominio   |
+| `src/app/estructuras/schemas.ts`        | Schemas Zod de cada bloque + tipos del dominio   |
 
 ## Validacion
 
@@ -70,7 +70,7 @@ const STATIC_PAYLOADS: Record<string, SitePayload> = {
 };
 ```
 
-Los schemas Zod de `src/components/schemas.ts` siguen existiendo, pero
+Los schemas Zod de `src/app/estructuras/schemas.ts` siguen existiendo, pero
 como **fuente de los tipos del dominio** (`z.infer`), no como validacion
 en runtime. La validacion en runtime solo tiene sentido cuando el dato
 viene de afuera (una API, un formulario): aca el dato es un archivo del
@@ -78,7 +78,7 @@ repo, y si esta mal el error aparece al compilar.
 
 La validacion en runtime **si** se usa donde el dato entra del exterior:
 el valor que el usuario tipea en el modal de insercion, validado con
-`ValorPilaSchema` (ver `docs/structures/README.md`).
+`ValorPilaSchema` (ver `docs/estructuras/README.md`).
 
 ## Sin cache
 
@@ -91,13 +91,13 @@ cache no aporta nada y solo complica el debug.
 Agregar una seccion (por ejemplo `section.cola`) son 4 pasos en 4
 archivos:
 
-| #   | Archivo                                    | Que hacer                                                                       |
-| --- | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| 1   | `src/components/schemas.ts`                | Definir `ColaContentSchema` con Zod                                             |
-| 2   | `src/components/schemas.ts`                | Exportar el tipo: `export type ColaContent = z.infer<typeof ColaContentSchema>` |
-| 3   | `src/services/data/site.ts`                | Ampliar el tipo `SiteContent` con la clave nueva                                |
-| 4   | `src/app/page.tsx`                         | Leer `content["section.cola"]` y pasar las props al organism                    |
-| 5   | `src/components/organisms/ColaSection.tsx` | El organism, que compone sus molecules y atoms                                  |
+| #   | Archivo                                          | Que hacer                                                                       |
+| --- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| 1   | `src/app/estructuras/schemas.ts`                 | Definir `ColaContentSchema` con Zod                                             |
+| 2   | `src/app/estructuras/schemas.ts`                 | Exportar el tipo: `export type ColaContent = z.infer<typeof ColaContentSchema>` |
+| 3   | `src/services/data/site.ts`                      | Ampliar el tipo `SiteContent` con la clave nueva                                |
+| 4   | `src/app/page.tsx`                               | Leer `content["section.cola"]` y pasar las props al organism                    |
+| 5   | `src/app/estructuras/components/ColaSection.tsx` | El organism, que compone sus molecules y atoms                                  |
 
 Sin el paso 3 el bloque no queda tipado: el acceso a
 `content["section.cola"]` seria un error de TypeScript.
@@ -115,7 +115,7 @@ Si la seccion tiene metadata, ademas hay que:
 
 1. Duplicar `site.<lang>.json`.
 2. Registrarlo en `STATIC_PAYLOADS` (`src/services/data/site.ts`).
-3. Agregar el codigo al tipo `Language` (`src/components/types.ts`).
+3. Agregar el codigo al tipo `Language` (`src/app/estructuras/types.ts`).
 
 El idioma se toma de `?lang=` en la URL (`src/app/page.tsx`). El
 mecanismo completo esta en **[`docs/i18n/README.md`](../i18n/README.md)**.

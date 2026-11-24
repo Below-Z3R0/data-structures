@@ -56,7 +56,7 @@ TypeScript en compile-time (no hay validacion en runtime).
 ## `data-structures/pila.ts`
 
 La logica de la PILA. Ver
-**[`docs/structures/README.md`](../structures/README.md)** para el
+**[`docs/estructuras/README.md`](../estructuras/README.md)** para el
 detalle del modelo en memoria, los algoritmos y los errores.
 
 Resumen de la API:

@@ -154,7 +154,16 @@ describe("regresar (deshacer)", () => {
   it("falla si no hay historial", () => {
     const res = regresar({ estados: [] });
     expect(res.ok).toBe(false);
-    if (!res.ok) expect(res.error).toBe("PILA_VACIA");
+    if (!res.ok) expect(res.error).toBe("sin_historial" satisfies ErrorPila);
+  });
+
+  it("no confunde 'sin_historial' con 'PILA_VACIA'", () => {
+    const sinHistorial = regresar({ estados: [] });
+    const pilaVacia = sacar(crearPila());
+    if (sinHistorial.ok || pilaVacia.ok) return;
+
+    expect(sinHistorial.error).toBe("sin_historial" satisfies ErrorPila);
+    expect(pilaVacia.error).toBe("PILA_VACIA" satisfies ErrorPila);
   });
 });
 

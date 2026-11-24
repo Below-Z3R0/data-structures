@@ -54,7 +54,8 @@ export type ErrorPila =
   | "PILA_LLENA"
   | "PILA_VACIA"
   | "VALOR_INVALIDO"
-  | "CANTIDAD_INVALIDA";
+  | "CANTIDAD_INVALIDA"
+  | "sin_historial";
 
 /** Resultado de una operacion sobre la pila. */
 export type ResultadoOperacion<T = undefined> =
@@ -191,7 +192,7 @@ export function regresar(historial: HistorialPila): ResultadoOperacion<{
 }> {
   const anterior = historial.estados.at(-1);
   if (!anterior) {
-    return { ok: false, error: "PILA_VACIA" };
+    return { ok: false, error: "sin_historial" };
   }
   return {
     ok: true,
