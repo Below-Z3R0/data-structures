@@ -26,8 +26,8 @@ export function EstructurasHero({
       <div className="flex flex-col gap-8">
         {/* Controles: idioma, paleta */}
         <div className="flex items-center justify-end gap-2">
-          <LanguageSwitcher />
-          <ThemeSwitcher />
+          <LanguageSwitcher ariaLabel={data.labels.idioma} />
+          <ThemeSwitcher ariaLabel={data.labels.paleta} />
         </div>
 
         {/* Titulos */}

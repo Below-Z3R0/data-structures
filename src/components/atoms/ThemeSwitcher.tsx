@@ -8,7 +8,7 @@ import { type Theme, ThemeData, useTheme } from "../hooks/useTheme";
 /**
  * Menu de paletas: permite elegir entre las 4 del sistema de theming.
  */
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ ariaLabel }: { ariaLabel: string }) {
   const { setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -18,7 +18,7 @@ export function ThemeSwitcher() {
         icon={<Palette className="size-5 text-foreground hover:text-primary" />}
         buttonBody="size-7 z-50"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Elegir paleta"
+        aria-label={ariaLabel}
         aria-expanded={isOpen}
       />
 

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "../components";
 
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ ariaLabel }: { ariaLabel: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -29,7 +29,7 @@ export function LanguageSwitcher() {
         }
         buttonBody="size-7 z-50"
         onClick={() => setIsOpen(!isOpen)}
-        aria-label="Elegir idioma"
+        aria-label={ariaLabel}
         aria-expanded={isOpen}
       />
       {isOpen && (
