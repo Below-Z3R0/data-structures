@@ -18,7 +18,8 @@
         "tamano": "TAMAÑO",
         "vacia": "PILA VACÍA",
         "llena": "PILA LLENA",
-        "indice": "Índice"
+        "indice": "Índice",
+        "error": "Error"
       },
       "buttons": {
         "insertar": "Insertar",
@@ -58,7 +59,8 @@
         "libres": "LIBRES",
         "vacia": "COLA VACÍA",
         "llena": "COLA LLENA",
-        "indice": "Índice"
+        "indice": "Índice",
+        "error": "Error"
       },
       "buttons": {
         "insertar": "Insertar",

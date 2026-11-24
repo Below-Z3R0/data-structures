@@ -27,6 +27,7 @@ export const PilaLabelsSchema = z.object({
   vacia: z.string(),
   llena: z.string(),
   indice: z.string(),
+  error: z.string(),
 });
 
 /** Textos de los botones de operacion. */
@@ -85,6 +86,7 @@ export const ColaLabelsSchema = z.object({
   vacia: z.string(),
   llena: z.string(),
   indice: z.string(),
+  error: z.string(),
 });
 
 /** Textos de los botones de operacion de la cola. */

@@ -18,7 +18,8 @@
         "tamano": "SIZE",
         "vacia": "EMPTY STACK",
         "llena": "FULL STACK",
-        "indice": "Index"
+        "indice": "Index",
+        "error": "Error"
       },
       "buttons": {
         "insertar": "Insert",
@@ -58,7 +59,8 @@
         "libres": "FREE",
         "vacia": "QUEUE EMPTY",
         "llena": "QUEUE FULL",
-        "indice": "Index"
+        "indice": "Index",
+        "error": "Error"
       },
       "buttons": {
         "insertar": "Insert",
