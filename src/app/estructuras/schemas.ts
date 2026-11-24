@@ -81,8 +81,9 @@ export const EstructuraMetadataSchema = z.object({
   description: z.string(),
 });
 
-/** section.hero metadata: lista de estructuras del menu. */
+/** section.hero metadata: etiqueta del menu y estructuras disponibles. */
 export const HeroMetadataSchema = z.object({
+  menu_label: z.string(),
   estructuras: z.array(EstructuraMetadataSchema),
 });
 

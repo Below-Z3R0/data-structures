@@ -17,6 +17,7 @@ import { Title2 } from "@/components/atoms/Title2";
 export function EstructurasHero({
   data,
   estructuras,
+  menuLabel,
   activa,
   onSelect,
 }: EstructurasHeroProps) {
@@ -44,6 +45,7 @@ export function EstructurasHero({
         {/* Menu de estructuras de datos */}
         <EstructuraMenu
           estructuras={estructuras}
+          menuLabel={menuLabel}
           activa={activa}
           onSelect={onSelect}
         />

@@ -29,6 +29,7 @@ export function EstructurasContainer({
         <EstructurasHero
           data={hero.data}
           estructuras={hero.meta.estructuras}
+          menuLabel={hero.meta.menu_label}
           activa={activa}
           onSelect={setActiva}
         />

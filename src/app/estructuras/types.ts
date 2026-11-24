@@ -39,6 +39,7 @@ export interface PilaCellProps {
 export interface EstructurasHeroProps {
   data: HeroContent;
   estructuras: EstructuraMetadata[];
+  menuLabel: string;
   activa: EstructuraId;
   onSelect: (id: EstructuraId) => void;
 }
@@ -53,6 +54,7 @@ export interface EstructurasContainerProps {
 
 export interface EstructuraMenuProps {
   estructuras: EstructuraMetadata[];
+  menuLabel: string;
   activa: EstructuraId;
   onSelect: (id: EstructuraId) => void;
 }

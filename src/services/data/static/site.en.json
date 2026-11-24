@@ -46,6 +46,7 @@
   },
   "metadata": {
     "section.hero": {
+      "menu_label": "Data structures",
       "estructuras": [
         {
           "id": "pila",
