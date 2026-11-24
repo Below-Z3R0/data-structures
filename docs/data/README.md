@@ -54,7 +54,7 @@ payload es la misma en ambos: lo que cambia es el idioma, no la forma.
 | `src/services/data/site.ts`             | Orquestador: valida y expone `getSiteData(lang)` |
 | `src/services/data/static/site.es.json` | Datos estaticos en espanol                       |
 | `src/services/data/static/site.en.json` | Datos estaticos en ingles                        |
-| `src/app/estructuras/schemas.ts`         | Schemas Zod de cada bloque + tipos del dominio   |
+| `src/app/estructuras/schemas.ts`        | Schemas Zod de cada bloque + tipos del dominio   |
 
 ## Validacion
 
@@ -91,12 +91,12 @@ cache no aporta nada y solo complica el debug.
 Agregar una seccion (por ejemplo `section.cola`) son 4 pasos en 4
 archivos:
 
-| #   | Archivo                                    | Que hacer                                                                       |
-| --- | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| 1   | `src/app/estructuras/schemas.ts`            | Definir `ColaContentSchema` con Zod                                             |
-| 2   | `src/app/estructuras/schemas.ts`            | Exportar el tipo: `export type ColaContent = z.infer<typeof ColaContentSchema>` |
-| 3   | `src/services/data/site.ts`                | Ampliar el tipo `SiteContent` con la clave nueva                                |
-| 4   | `src/app/page.tsx`                         | Leer `content["section.cola"]` y pasar las props al organism                    |
+| #   | Archivo                                          | Que hacer                                                                       |
+| --- | ------------------------------------------------ | ------------------------------------------------------------------------------- |
+| 1   | `src/app/estructuras/schemas.ts`                 | Definir `ColaContentSchema` con Zod                                             |
+| 2   | `src/app/estructuras/schemas.ts`                 | Exportar el tipo: `export type ColaContent = z.infer<typeof ColaContentSchema>` |
+| 3   | `src/services/data/site.ts`                      | Ampliar el tipo `SiteContent` con la clave nueva                                |
+| 4   | `src/app/page.tsx`                               | Leer `content["section.cola"]` y pasar las props al organism                    |
 | 5   | `src/app/estructuras/components/ColaSection.tsx` | El organism, que compone sus molecules y atoms                                  |
 
 Sin el paso 3 el bloque no queda tipado: el acceso a

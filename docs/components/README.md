@@ -37,12 +37,12 @@ una molecule.
 
 ## Que hay hoy
 
-| Nivel        | Componentes                                                                                                                                                                                     |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nivel        | Componentes                                                                                                                                                                         |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `atoms/`     | `BackgroundFX` · `Button` · `FieldInput` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4` |
-| `molecules/` | `Modal`                                                                                                                                                                                          |
-| `organisms/` | `ErrorPage`                                                                                                                                                                                     |
-| dominio     | `src/app/estructuras/` — `EstructurasContainer` · `EstructurasHero` · `EstructuraMenu` · `PilaSection` · `PilaVisualizer` · `PilaCell`                      |
+| `molecules/` | `Modal`                                                                                                                                                                             |
+| `organisms/` | `ErrorPage`                                                                                                                                                                         |
+| dominio      | `src/app/estructuras/` — `EstructurasContainer` · `EstructurasHero` · `EstructuraMenu` · `PilaSection` · `PilaVisualizer` · `PilaCell`                                              |
 
 Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
 `useTheme`), `skeletons/` (`HomePageSkeleton`, `SkeletonPulse`).
@@ -52,13 +52,13 @@ Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
 Todo es **Server Component** salvo que necesite estado o interaccion del
 navegador.
 
-| Componente         | Tipo       | Por que                                   |
-| ------------------ | ---------- | ----------------------------------------- |
-| `ErrorPage`        | Server     | Solo renderiza props                      |
-| `Modal`            | **Client** | AnimatePresence y handlers                |
-| `FieldInput`       | **Client** | Input controlado                          |
-| `LanguageSwitcher` | **Client** | `useRouter` + `useSearchParams`           |
-| `ThemeSwitcher`    | **Client** | `useTheme`                                |
+| Componente         | Tipo       | Por que                         |
+| ------------------ | ---------- | ------------------------------- |
+| `ErrorPage`        | Server     | Solo renderiza props            |
+| `Modal`            | **Client** | AnimatePresence y handlers      |
+| `FieldInput`       | **Client** | Input controlado                |
+| `LanguageSwitcher` | **Client** | `useRouter` + `useSearchParams` |
+| `ThemeSwitcher`    | **Client** | `useTheme`                      |
 
 Los componentes del dominio de estructuras viven en `src/app/estructuras/`:
 `EstructurasContainer` (Client, dueno del estado de la estructura activa),
