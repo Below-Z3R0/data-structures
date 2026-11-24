@@ -35,7 +35,11 @@ export function EstructurasContainer({
       </SectionReveal>
 
       <SectionReveal>
-        {activa === "pila" ? <PilaSection data={pila} /> : null}
+        {hero.meta.estructuras.map((estructura) => (
+          <div key={estructura.id} hidden={estructura.id !== activa}>
+            {estructura.id === "pila" ? <PilaSection data={pila} /> : null}
+          </div>
+        ))}
       </SectionReveal>
     </>
   );
