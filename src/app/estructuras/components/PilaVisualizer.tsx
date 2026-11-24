@@ -81,6 +81,7 @@ export function PilaVisualizer({
               value={valor}
               isCima={index === pila.cima - 1}
               indiceLabel={labels.indice}
+              cimaLabel={labels.cima}
             />
           ))}
         </div>
