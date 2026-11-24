@@ -1,6 +1,5 @@
 "use client";
 
-import type { EstructuraId } from "@/app/estructuras/services/registro";
 import type { EstructuraMenuProps } from "@/app/estructuras/types";
 import { Button } from "@/components/atoms/Button";
 
@@ -30,7 +29,7 @@ export function EstructuraMenu({
             type="button"
             txt={estructura.label}
             title={estructura.description}
-            onClick={() => onSelect(estructura.id as EstructuraId)}
+            onClick={() => onSelect(estructura.id)}
             aria-pressed={esActiva}
             buttonBody={
               esActiva

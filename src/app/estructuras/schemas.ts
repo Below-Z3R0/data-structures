@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ESTRUCTURA_IDS } from "./services/registro";
 
 // =============================================================================
 // SCHEMAS DE CONTENIDO (traducibles — viven en content)
@@ -75,7 +76,7 @@ export const PilaContentSchema = z.object({
  * payload con su propia etiqueta).
  */
 export const EstructuraMetadataSchema = z.object({
-  id: z.string(),
+  id: z.enum(ESTRUCTURA_IDS),
   label: z.string(),
   description: z.string(),
 });

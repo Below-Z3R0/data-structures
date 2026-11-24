@@ -8,7 +8,14 @@
  * Por ahora solo hay PILA (requisito 1 de la tarea).
  */
 
-export type EstructuraId = "pila";
+/**
+ * Identificadores validos de estructura. Es la fuente unica del tipo
+ * `EstructuraId` y del enum con el que se valida el catalogo del payload.
+ */
+export const ESTRUCTURA_IDS = ["pila"] as const;
+
+/** Id de una estructura de datos disponible. */
+export type EstructuraId = (typeof ESTRUCTURA_IDS)[number];
 
 export interface EstructuraInfo {
   /** Identificador estable, usado como clave de render. */

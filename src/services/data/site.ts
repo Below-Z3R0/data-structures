@@ -1,7 +1,8 @@
-import type {
-  HeroContent,
-  HeroMetadata,
-  PilaContent,
+import { z } from "zod";
+import {
+  HeroContentSchema,
+  HeroMetadataSchema,
+  PilaContentSchema,
 } from "@/app/estructuras/schemas";
 import en from "./static/site.en.json";
 import es from "./static/site.es.json";
@@ -19,12 +20,12 @@ import es from "./static/site.es.json";
 // =============================================================================
 
 export type SiteContent = {
-  "section.hero": HeroContent;
-  "section.pila": PilaContent;
+  "section.hero": z.infer<typeof HeroContentSchema>;
+  "section.pila": z.infer<typeof PilaContentSchema>;
 };
 
 export type SiteMetadata = {
-  "section.hero": HeroMetadata;
+  "section.hero": z.infer<typeof HeroMetadataSchema>;
 };
 
 export type SitePayload = {
@@ -32,14 +33,31 @@ export type SitePayload = {
   metadata: SiteMetadata;
 };
 
+/**
+ * Valida el payload estatico contra los schemas del dominio.
+ *
+ * El JSON importado por TypeScript pierde los literales (`id` entra como
+ * `string`), asi que el parseo es lo que estrecha el catalogo al contrato
+ * real del dominio y hace fallar el build si un id no existe.
+ */
+const SitePayloadSchema: z.ZodType<SitePayload> = z.object({
+  content: z.object({
+    "section.hero": HeroContentSchema,
+    "section.pila": PilaContentSchema,
+  }),
+  metadata: z.object({
+    "section.hero": HeroMetadataSchema,
+  }),
+});
+
 // =============================================================================
 // FUENTE DE DATOS
 // =============================================================================
 
 /** Payloads estaticos, indexados por idioma. */
 const STATIC_PAYLOADS: Record<string, SitePayload> = {
-  en: en,
-  es: es,
+  en: SitePayloadSchema.parse(en),
+  es: SitePayloadSchema.parse(es),
 };
 
 const DEFAULT_LANG = "es";

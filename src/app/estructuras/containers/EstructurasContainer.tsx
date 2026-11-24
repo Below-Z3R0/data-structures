@@ -19,7 +19,9 @@ export function EstructurasContainer({
   hero,
   pila,
 }: EstructurasContainerProps) {
-  const [activa, setActiva] = useState<EstructuraId>("pila");
+  const [activa, setActiva] = useState<EstructuraId>(
+    hero.meta.estructuras[0]?.id ?? "pila",
+  );
 
   return (
     <>
