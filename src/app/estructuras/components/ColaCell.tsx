@@ -25,6 +25,16 @@ export function ColaCell({
   finalLabel,
 }: ColaCellProps) {
   const destacada = esFrente || esFinal;
+  const marcas = [esFrente ? frenteLabel : null, esFinal ? finalLabel : null]
+    .filter(Boolean)
+    .join(", ");
+  const etiquetaCelda = [
+    `${indiceLabel} ${index + 1}`,
+    marcas,
+    value === null ? "" : `${value}`,
+  ]
+    .filter((parte) => parte.length > 0)
+    .join(", ");
 
   return (
     <div className="flex flex-col items-center gap-2 w-full">
@@ -34,6 +44,7 @@ export function ColaCell({
         {esFrente && (
           <m.span
             key="badge-frente"
+            aria-hidden="true"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -45,6 +56,7 @@ export function ColaCell({
         {esFinal && (
           <m.span
             key="badge-final"
+            aria-hidden="true"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
@@ -57,6 +69,8 @@ export function ColaCell({
 
       {/* Celda */}
       <div
+        aria-label={etiquetaCelda}
+        role="img"
         className={`w-full aspect-square max-w-18 min-w-12 rounded-xl border flex items-center justify-center font-mono text-2xl font-bold transition-colors ${
           destacada
             ? "bg-primary text-primary-foreground border-primary shadow-[0_0_24px_rgba(139,92,246,0.35)]"

@@ -14,7 +14,20 @@ import type { PilaCellProps } from "@/app/estructuras/types";
  * saca, el numero entra o sale con fade + scale en vez de desaparecer de
  * golpe.
  */
-export function PilaCell({ index, value, isCima, indiceLabel }: PilaCellProps) {
+export function PilaCell({
+  index,
+  value,
+  isCima,
+  indiceLabel,
+  cimaLabel,
+}: PilaCellProps) {
+  const etiquetaCelda =
+    value === null
+      ? `${indiceLabel} ${index + 1}`
+      : isCima
+        ? `${indiceLabel} ${index + 1}, ${cimaLabel}, ${value}`
+        : `${indiceLabel} ${index + 1}, ${value}`;
+
   return (
     <div className="flex flex-col items-center gap-2 w-full">
       {/* Flecha que marca la CIMA */}
@@ -34,6 +47,8 @@ export function PilaCell({ index, value, isCima, indiceLabel }: PilaCellProps) {
 
       {/* Celda */}
       <div
+        aria-label={etiquetaCelda}
+        role="img"
         className={`w-full aspect-square max-w-18 min-w-12 rounded-xl border flex items-center justify-center font-mono text-2xl font-bold transition-colors ${
           isCima
             ? "bg-primary text-primary-foreground border-primary shadow-[0_0_24px_rgba(139,92,246,0.35)]"

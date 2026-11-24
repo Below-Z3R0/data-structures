@@ -36,6 +36,8 @@ export interface PilaCellProps {
   isCima: boolean;
   /** Etiqueta del eje de indices. */
   indiceLabel: string;
+  /** Etiqueta de la marca CIMA (para el aria-label). */
+  cimaLabel: string;
 }
 
 export interface ColaCellProps {

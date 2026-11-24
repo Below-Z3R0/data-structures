@@ -15,7 +15,7 @@ docs/
   data/              <- contrato de datos y modo estatico
   components/        <- atomic design: atoms, molecules, organisms
   estructuras/       <- las estructuras de datos (PILA y COLA) y su modelo
-  services/          <- capa de servicios (datos, logica de estructuras)
+  services/          <- capa de datos del sitio (payload i18n)
   decisions/         <- decisiones tecnicas y por que se tomaron
   i18n/              <- idioma: como se elige y como se traduce
 ```
@@ -29,7 +29,7 @@ docs/
 | `motion`      | Las primitivas de animacion y las reglas de `LazyMotion`                   |
 | `data`        | El contrato `content`/`metadata` y el origen estatico                      |
 | `components`  | Atomic design: los tres niveles y como agregar un componente               |
-| `services`    | La capa de servicios: datos estaticos y logica de estructuras              |
+| `services`    | La capa de datos del sitio: payload estatico por idioma                    |
 | `decisions`   | Las decisiones tecnicas con contexto y alternativas descartadas            |
 | `i18n`        | El idioma por query param, los datos por idioma y el tipo `Language`       |
 

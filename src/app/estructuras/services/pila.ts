@@ -143,7 +143,8 @@ export function sacar(
     return { ok: false, error: "PILA_VACIA" };
   }
 
-  const extraido = pila.celdas[pila.cima - 1] as number;
+  const extraido = pila.celdas[pila.cima - 1];
+  if (extraido == null) return { ok: false, error: "PILA_VACIA" };
   const celdas = [...pila.celdas];
   celdas[pila.cima - 1] = null;
   return {
