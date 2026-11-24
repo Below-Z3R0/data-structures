@@ -1,7 +1,7 @@
-// Client Components: se importan directo del archivo, no del barrel, para
-// evitar el bug de Turbopack con barrels que mezclan client y server.
+"use client";
+
+import { EstructuraMenu } from "@/app/estructuras/components/EstructuraMenu";
 import type { EstructurasHeroProps } from "@/app/estructuras/types";
-import { Button } from "@/components/atoms/Button";
 import { LanguageSwitcher } from "@/components/atoms/LanguageSwitcher";
 import { ThemeSwitcher } from "@/components/atoms/ThemeSwitcher";
 import { Title1 } from "@/components/atoms/Title1";
@@ -14,9 +14,12 @@ import { Title2 } from "@/components/atoms/Title2";
  * de datos: botones en linea, uno al lado del otro, que cambian que se
  * renderiza debajo.
  */
-export function EstructurasHero({ hero_data }: EstructurasHeroProps) {
-  const { data, meta } = hero_data;
-
+export function EstructurasHero({
+  data,
+  estructuras,
+  activa,
+  onSelect,
+}: EstructurasHeroProps) {
   return (
     <section id="Home" className="pt-10">
       <div className="flex flex-col gap-8">
@@ -39,21 +42,11 @@ export function EstructurasHero({ hero_data }: EstructurasHeroProps) {
         </div>
 
         {/* Menu de estructuras de datos */}
-        <nav
-          aria-label="Estructuras de datos"
-          className="flex flex-wrap items-center gap-3"
-        >
-          {meta.estructuras.map((estructura) => (
-            <Button
-              key={estructura.id}
-              txt={estructura.label}
-              title={estructura.description}
-              aria-current="true"
-              buttonBody="h-11 px-6 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-primary/20"
-              txtStyle="text-primary-foreground!"
-            />
-          ))}
-        </nav>
+        <EstructuraMenu
+          estructuras={estructuras}
+          activa={activa}
+          onSelect={onSelect}
+        />
       </div>
     </section>
   );

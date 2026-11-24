@@ -8,6 +8,7 @@ import type {
   PilaLabels,
   PilaModal,
 } from "./schemas";
+import type { EstructuraId } from "./services/registro";
 
 // =============================================================================
 // GLOBALES
@@ -36,10 +37,24 @@ export interface PilaCellProps {
 // =============================================================================
 
 export interface EstructurasHeroProps {
-  hero_data: {
+  data: HeroContent;
+  estructuras: EstructuraMetadata[];
+  activa: EstructuraId;
+  onSelect: (id: EstructuraId) => void;
+}
+
+export interface EstructurasContainerProps {
+  hero: {
     data: HeroContent;
     meta: HeroMetadata;
   };
+  pila: PilaContent;
+}
+
+export interface EstructuraMenuProps {
+  estructuras: EstructuraMetadata[];
+  activa: EstructuraId;
+  onSelect: (id: EstructuraId) => void;
 }
 
 /**
