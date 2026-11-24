@@ -1,4 +1,4 @@
-import type { TitleProps } from "../types";
+import type { TitleProps } from "./Title1";
 
 export function Title2({ txt, className }: TitleProps) {
   return (

@@ -1,9 +1,9 @@
-import { SectionReveal } from "@/components/animations/Animations";
 // Los Server Components importan directo del archivo, no del barrel: el
 // barrel re-exporta Client Components y Turbopack los resuelve como
 // undefined en RSC ("Element type is invalid ... got: undefined").
-import { HeroSection } from "@/components/organisms/HeroSection";
-import { PilaSection } from "@/components/organisms/PilaSection";
+import { EstructurasHero } from "@/app/estructuras/components/EstructurasHero";
+import { PilaSection } from "@/app/estructuras/components/PilaSection";
+import { SectionReveal } from "@/components/animations/Animations";
 import { getSiteData } from "@/services/data/site";
 
 interface PageProps {
@@ -39,7 +39,7 @@ export default async function Home({ searchParams }: PageProps) {
       className="flex flex-col gap-20 max-w-241.5 mx-auto px-5 pb-40"
     >
       <SectionReveal>
-        <HeroSection hero_data={hero_data} />
+        <EstructurasHero hero_data={hero_data} />
       </SectionReveal>
 
       <SectionReveal>

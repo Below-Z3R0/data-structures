@@ -1,11 +1,11 @@
 // Client Components: se importan directo del archivo, no del barrel, para
 // evitar el bug de Turbopack con barrels que mezclan client y server.
-import { Button } from "../atoms/Button";
-import { LanguageSwitcher } from "../atoms/LanguageSwitcher";
-import { ThemeSwitcher } from "../atoms/ThemeSwitcher";
-import { Title1 } from "../atoms/Title1";
-import { Title2 } from "../atoms/Title2";
-import type { HeroSectionProps } from "../types";
+import type { EstructurasHeroProps } from "@/app/estructuras/types";
+import { Button } from "@/components/atoms/Button";
+import { LanguageSwitcher } from "@/components/atoms/LanguageSwitcher";
+import { ThemeSwitcher } from "@/components/atoms/ThemeSwitcher";
+import { Title1 } from "@/components/atoms/Title1";
+import { Title2 } from "@/components/atoms/Title2";
 
 /**
  * Cabecera de la pagina.
@@ -14,7 +14,7 @@ import type { HeroSectionProps } from "../types";
  * de datos: botones en linea, uno al lado del otro, que cambian que se
  * renderiza debajo.
  */
-export function HeroSection({ hero_data }: HeroSectionProps) {
+export function EstructurasHero({ hero_data }: EstructurasHeroProps) {
   const { data, meta } = hero_data;
 
   return (

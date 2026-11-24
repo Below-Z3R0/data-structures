@@ -3,6 +3,7 @@
 import { AlertTriangle, Pencil, Plus, RotateCcw, Trash2 } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
 import { useState } from "react";
+import { PilaVisualizer } from "@/app/estructuras/components/PilaVisualizer";
 import {
   crearPila,
   type ErrorPila,
@@ -14,9 +15,11 @@ import {
   regresar,
   sacar,
   valoresPila,
-} from "@/services/data-structures/pila";
-import { Button, Modal, PilaInput, PilaVisualizer } from "../components";
-import type { PilaViewData } from "../types";
+} from "@/app/estructuras/services/pila";
+import type { PilaViewData } from "@/app/estructuras/types";
+import { Button } from "@/components/atoms/Button";
+import { FieldInput } from "@/components/atoms/FieldInput";
+import { Modal } from "@/components/molecules/Modal";
 
 /** Modales posibles de la seccion de pila. */
 type ModalPila = "insertar" | "eliminar" | "editar" | "error" | null;
@@ -26,7 +29,7 @@ type ModalPila = "insertar" | "eliminar" | "editar" | "error" | null;
  *
  * Es la hoja con estado: guarda el contenido de la pila, el historial
  * para "Regresar" y el modal abierto. Toda la logica de la estructura
- * vive en `@/services/data-structures/pila`; este componente solo la
+ * vive en `@/app/estructuras/services/pila`; este componente solo la
  * orquesta y la muestra.
  */
 export function PilaSection({ data }: { data: PilaViewData }) {
@@ -206,7 +209,7 @@ export function PilaSection({ data }: { data: PilaViewData }) {
           </>
         }
       >
-        <PilaInput
+        <FieldInput
           id="valor-insercion"
           label={modalText.insertar_label}
           placeholder={modalText.insertar_placeholder}
@@ -265,7 +268,7 @@ export function PilaSection({ data }: { data: PilaViewData }) {
           </>
         }
       >
-        <PilaInput
+        <FieldInput
           id="valores-edicion"
           label={modalText.editar_label}
           placeholder={modalText.editar_placeholder}

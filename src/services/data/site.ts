@@ -2,7 +2,7 @@ import type {
   HeroContent,
   HeroMetadata,
   PilaContent,
-} from "@/components/schemas";
+} from "@/app/estructuras/schemas";
 import en from "./static/site.en.json";
 import es from "./static/site.es.json";
 

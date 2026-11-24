@@ -1,4 +1,20 @@
-import type { ButtonProps } from "../types";
+import type { ButtonHTMLAttributes, MouseEventHandler, ReactNode } from "react";
+
+/**
+ * Contrato del boton base del sistema de diseno.
+ *
+ * Vive aca y no en un archivo de tipos compartido: el boton es UI
+ * compartida y su contrato no depende de ningun dominio.
+ */
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  children?: ReactNode;
+  /** Icono renderizado a la izquierda del texto (componente de lucide-react). */
+  icon?: ReactNode;
+  txt?: string | null;
+  buttonBody?: string;
+  txtStyle?: string;
+}
 
 /**
  * Boton base del sistema de diseno.

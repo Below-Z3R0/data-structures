@@ -2,8 +2,24 @@
 
 import { X } from "lucide-react";
 import { AnimatePresence, m } from "motion/react";
+import type { ReactNode } from "react";
 import { Button } from "../components";
-import type { ModalProps } from "../types";
+
+/**
+ * Contrato del modal generico: backdrop, contenido y cierre.
+ *
+ * `footer` es la zona de acciones (confirmar / cancelar). El contenido
+ * principal va en `children`.
+ */
+export interface ModalProps {
+  open: boolean;
+  onClose: () => void;
+  title?: string;
+  children?: ReactNode;
+  footer?: ReactNode;
+  /** Variante visual del modal. */
+  variant?: "default" | "danger";
+}
 
 /**
  * Modal generico con backdrop, titulo, contenido y zona de acciones.
