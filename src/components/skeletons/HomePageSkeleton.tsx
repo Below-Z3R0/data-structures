@@ -2,7 +2,7 @@ import { SkeletonPulse } from "./SkeletonPulse";
 
 /**
  * Skeleton de la pagina: replica la estructura del contenido real
- * (cabecera, menu de estructuras, arreglo de la pila y botones) para que
+ * (cabecera, menu de estructuras, arreglo de la estructura y botones) para que
  * la carga no produzca un salto de layout.
  */
 export function HomePageSkeleton() {
@@ -23,7 +23,7 @@ export function HomePageSkeleton() {
           <SkeletonPulse className="h-11 w-28 rounded-xl" />
         </section>
 
-        {/* Panel de la pila */}
+        {/* Panel de la estructura */}
         <section className="flex flex-col gap-10">
           <SkeletonPulse className="h-20 w-full max-w-3xl mx-auto rounded-2xl" />
           <div className="flex justify-center gap-4">

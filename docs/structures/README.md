@@ -178,5 +178,5 @@ dato invalido aunque el service se use por otro camino.
 4. Agregar el contenido (textos, labels, errores) al JSON estatico de
    ambos idiomas, en `section.pila` o en una seccion nueva.
 5. Si la estructura necesita su propia seccion en el payload: definí el
-   schema en `components/schemas.ts`, ampliá el tipo `SiteContent` en
+   schema en `app/estructuras/schemas.ts`, ampliá el tipo `SiteContent` en
    `services/data/site.ts` y agregá la clave en los dos JSON estaticos.
