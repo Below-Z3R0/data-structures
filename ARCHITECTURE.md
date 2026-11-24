@@ -54,10 +54,13 @@ src/
 │       ├── components/
 │       │   ├── EstructurasHero.tsx        # cabecera: títulos + controles de idioma y tema + menú
 │       │   ├── EstructuraMenu.tsx         # botones Pila | Cola (radiogroup)
-│       │   ├── PilaSection.tsx            # organismo: estado de la pila y sus modales
+│       │   ├── EstructuraSection.tsx      # genérico: estado, historial y los 4 modales (una sola copia)
+│       │   ├── pilaAdapter.tsx            # traduce pila.ts al contrato del genérico
+│       │   ├── colaAdapter.tsx            # traduce cola.ts al contrato del genérico
+│       │   ├── PilaSection.tsx            # 17 líneas: data + adapter + visualizador
+│       │   ├── ColaSection.tsx            # 17 líneas: idem
 │       │   ├── PilaVisualizer.tsx         # arreglo de 6 celdas + panel de estado
 │       │   ├── PilaCell.tsx               # una celda: índice, valor, flecha de CIMA
-│       │   ├── ColaSection.tsx            # organismo: estado de la cola y sus modales
 │       │   ├── ColaVisualizer.tsx         # arreglo circular + FRENTE/FINAL/MAX/NE/EL
 │       │   └── ColaCell.tsx               # una celda con badges FRENTE y FINAL
 │       ├── services/

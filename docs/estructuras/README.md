@@ -96,18 +96,18 @@ editarPila([5, 12, 30]); // ok -> reemplaza todo el contenido
 regresar(historial); // ok -> vuelve al estado anterior
 ```
 
-| Concepto         | Funcion / constante                       |
-| ---------------- | ----------------------------------------- |
-| `PILA`           | `Pila.celdas` (array de 6, `null` libre)  |
-| `TAMAÑO = 6`     | `TAMAANO_PILA`                            |
-| `CIMA`           | `Pila.cima`                               |
-| PILA VACIA       | `estaVacia(pila)` / `cima === 0`          |
-| PILA LLENA       | `estaLlena(pila)` / `cima === TAMAANO`    |
-| Valor de la cima | `valorCima(pila)`                         |
-| METER            | `meter(pila, valor)`                      |
-| SACAR            | `sacar(pila)`                             |
-| Editar todo      | `editarPila(valores)`                     |
-| REGRESAR         | `regresar(historial)` + `registrarEstado` |
+| Concepto         | Funcion / constante                         |
+| ---------------- | ------------------------------------------- |
+| `PILA`           | `Pila.celdas` (array de 6, `null` libre)    |
+| `TAMAÑO = 6`     | `TAMAANO_PILA`                              |
+| `CIMA`           | `Pila.cima`                                 |
+| PILA VACIA       | `estaVacia(pila)` / `cima === 0`            |
+| PILA LLENA       | `estaLlena(pila)` / `cima === TAMAANO_PILA` |
+| Valor de la cima | `valorCima(pila)`                           |
+| METER            | `meter(pila, valor)`                        |
+| SACAR            | `sacar(pila)`                               |
+| Editar todo      | `editarPila(valores)`                       |
+| REGRESAR         | `regresar(historial)` + `registrarEstado`   |
 
 > **Ojo con el base.** `CIMA` es base 1 (como en el pseudocodigo), pero el
 > array es 0-based. El valor de la cima vive en `celdas[cima - 1]`.
@@ -144,11 +144,12 @@ Los errores de la estructura **se muestran en un modal**, no en
 ### El flujo en la UI
 
 ```
-PilaSection (component, "use client")
-  ├─ estado: pila, historial, modal abierto
-  ├─ PilaVisualizer              → PilaCell x6
-  ├─ botones: Insertar / Eliminar / Regresar / Editar
-  └─ Modal x4                    → FieldInput (atom)
+PilaSection (17 lineas)
+  └─ EstructuraSection<Pila>  (generico, "use client")
+       ├─ estado: pila, historial, modal abierto, error, valorInsercion, valoresEdicion
+       ├─ PilaVisualizer              → PilaCell x6
+       ├─ botones: Insertar / Eliminar / Regresar / Editar
+       └─ Modal x4  (FieldInput solo en insertar y editar)
 ```
 
 | Boton    | Accion                | Modal                   |
@@ -164,14 +165,17 @@ restaura. El boton se deshabilita cuando el historial esta vacio.
 
 ### Validacion
 
-Los valores se validan con **Zod** en el borde (`ValorPilaSchema`):
+Un valor llega al service pasando por dos reglas distintas, y conviene saber
+cual manda en cada capa:
 
-```ts
-z.number().int("El valor debe ser un numero entero").min(1).max(99);
-```
+| Capa                             | Regla                                               | Que atrapa                                    |
+| -------------------------------- | --------------------------------------------------- | --------------------------------------------- |
+| Formulario (`EstructuraSection`) | regex `/^\d+$/` sobre el texto                      | que no sea digitos: vacio, `-3`, `4.5`, `abc` |
+| Service (`pila.ts` / `cola.ts`)  | `ValorPilaSchema` / `ValorColaSchema`               | rango y tipo: entero entre 1 y 99             |
+| Edicion completa                 | `ListaValoresPilaSchema` / `ListaValoresColaSchema` | cantidad (maximo 6) y el rango de cada valor  |
 
-El mismo schema se usa en el service, asi que la logica nunca acepta un
-dato invalido aunque el service se use por otro camino.
+La regex del borde es una comodidad del input; la validacion que **manda** es la
+del service, porque tambien protege a quien lo llame por otro camino.
 
 ## La COLA (QUEUE)
 
@@ -271,17 +275,21 @@ puras, sin React ni DOM, con Zod validando la entrada.
 
 ### El flujo en la UI
 
-`ColaSection` es el organismo dueño del estado; `ColaVisualizer` dibuja las
-celdas y el panel; `ColaCell` es una celda con sus badges.
+`ColaSection` solo conecta los datos con el genérico; `ColaVisualizer` dibuja
+las celdas y el panel; `ColaCell` es una celda con sus badges.
 
 ```
-ColaSection (client)
-  |  useState: cola, historial, modalAbierto, errorMensaje, valorInsercion, valoresEdicion
-  |  llama a services/cola.ts (funciones puras)
-  +-> ColaVisualizer
-  |     +-> ColaCell x6  (badge FRENTE y/o FINAL arriba de la celda)
-  +-> Modal x4  (insertar / eliminar / editar / error)
+ColaSection (17 lineas)
+  +-> EstructuraSection<Cola>  (el mismo generico que usa la pila)
+        |  useState: cola, historial, modalAbierto, errorMensaje, valorInsercion, valoresEdicion
+        |  llama a services/cola.ts (funciones puras) via colaAdapter
+        +-> ColaVisualizer
+        |     +-> ColaCell x6  (badge FRENTE y/o FINAL arriba de la celda)
+        +-> Modal x4  (insertar / eliminar / editar / error)
 ```
+
+El flujo de los modales y del historial es **el mismo** para las dos
+estructuras: vive una sola vez en `EstructuraSection`.
 
 **El panel de estado siempre esta visible:** `FRENTE`, `FINAL`, `MAX`,
 `ELEMENTOS` (NE) y `LIBRES` (EL), mas el badge `COLA VACIA` / `COLA LLENA`.

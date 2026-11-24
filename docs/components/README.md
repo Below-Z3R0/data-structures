@@ -37,12 +37,12 @@ una molecule.
 
 ## Que hay hoy
 
-| Nivel        | Componentes                                                                                                                                                                         |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `atoms/`     | `BackgroundFX` · `Button` · `FieldInput` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4` |
-| `molecules/` | `Modal`                                                                                                                                                                             |
-| `organisms/` | `ErrorPage`                                                                                                                                                                         |
-| dominio      | `src/app/estructuras/` — `EstructurasContainer` · `EstructurasHero` · `EstructuraMenu` · `PilaSection` · `PilaVisualizer` · `PilaCell`                                              |
+| Nivel        | Componentes                                                                                                                                                                                                                                  |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `atoms/`     | `BackgroundFX` · `Button` · `FieldInput` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4`                                                          |
+| `molecules/` | `Modal`                                                                                                                                                                                                                                      |
+| `organisms/` | `ErrorPage`                                                                                                                                                                                                                                  |
+| dominio      | `src/app/estructuras/` — `EstructurasContainer` · `EstructurasHero` · `EstructuraMenu` · `EstructuraSection` · `pilaAdapter` · `colaAdapter` · `PilaSection` · `ColaSection` · `PilaVisualizer` · `ColaVisualizer` · `PilaCell` · `ColaCell` |
 
 Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
 `useTheme`), `skeletons/` (`HomePageSkeleton`, `SkeletonPulse`).
@@ -63,9 +63,12 @@ navegador.
 Los componentes del dominio de estructuras viven en `src/app/estructuras/`:
 `EstructurasContainer` (Client, dueno del estado de la estructura activa),
 `EstructurasHero` (Client, cabecera + menu), `EstructuraMenu` (Client, los
-botones del menu), `PilaSection` (Client, estado de la pila),
-`PilaVisualizer` (Server, dibuja el arreglo) y `PilaCell` (Client,
-AnimatePresence para el valor de la celda).
+botones del menu), `EstructuraSection` (Client, estado e historial genericos de
+una estructura), `pilaAdapter` / `colaAdapter` (modulos planos, sin JSX propio),
+`PilaSection` / `ColaSection` (Client, 17 lineas: data + adapter + visualizador),
+`PilaVisualizer` y `ColaVisualizer` (**Client por importacion**: los renderiza
+una Section que ya es Client, aunque no lleven `"use client"` propio) y
+`PilaCell` / `ColaCell` (Client, AnimatePresence para el valor de la celda).
 
 `src/app/page.tsx` es un Server Component: **no puede tener estado**. El
 estado de la pila vive en `PilaSection`, que es `"use client"`. El estado
@@ -93,8 +96,9 @@ import { LanguageSwitcher } from "../atoms/LanguageSwitcher";
 Aplica a todos los imports desde un Server Component. Los Client
 Components pueden usar el barrel sin problema.
 
-Los archivos afectados hoy: `src/app/page.tsx` y los componentes del
-dominio en `src/app/estructuras/`.
+Estado real del barrel: el unico import que lo usa en todo `src/` es
+`src/app/error.tsx:4`, y es un Client Component, asi que no sufre el bug. Todo
+el resto —`page.tsx`, el dominio y los layouts— importa directo del archivo.
 
 ## Props
 

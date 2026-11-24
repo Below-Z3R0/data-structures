@@ -33,12 +33,19 @@ mantenimiento), **BAJO** (desviacion menor).
 
 ## Resumen
 
-| Severidad | Cantidad | IDs                    |
-| --------- | -------- | ---------------------- |
-| CRITICO   | 0        | —                      |
-| ALTO      | 5        | A1, A2, A3, A4, A5     |
-| MEDIO     | 6        | M1, M2, M3, M4, M5, M6 |
-| BAJO      | 5        | B1, B2, B3, B4, B5     |
+| Severidad | Cantidad | IDs                            |
+| --------- | -------- | ------------------------------ |
+| CRITICO   | 0        | —                              |
+| ALTO      | 6        | A1, A2, A3, A4, A5, C1         |
+| MEDIO     | 8        | M1, M2, M3, M4, M5, M6, C2, C3 |
+| BAJO      | 6        | B1, B2, B3, B4, B5, C4         |
+
+**Cerrados: 19 de 20.**
+**Abierto: 1** (C4), que es una decision deliberada sin accion.
+
+Los de documentacion (M4, M5, M6, B3, B4, B5) se corrigieron al reescribir
+`docs/services/README.md`, `docs/components/README.md` y el `README.md` del
+modulo en la misma pasada.
 
 ---
 
@@ -226,3 +233,51 @@ NE=3`; eliminar tres veces baja `FRENTE` a 2, 3 y despues resetea a `0/0`;
 llenar deja `1/6/6` con `COLA LLENA`; con `FRENTE=3, FINAL=6` el insert hace
 wrap a `FINAL=1` y otro mas a `FINAL=2`; con `FRENTE=3, FINAL=2` la cola se
 declara llena. El panel de la UI refleja `NE` y `EL` en cada paso.
+
+---
+
+## Cierre de M1c (pulido)
+
+| ID  | Cerrado en | Cómo                                                                                                                                                                                |
+| --- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| C1  | `c43bc64`  | `data-testid` por estructura (`pila-insertar` / `cola-insertar`) y ids de input con prefijo. La seccion inactiva sigue montada (A5) pero las pruebas pueden scopear sin ambiguedad. |
+| C3  | `9ff2d3c`  | `error` agregado a `PilaLabelsSchema` y `ColaLabelsSchema` y a los dos JSON. El modal de error se titula "Error" en las dos estructuras.                                            |
+| C2  | `b2e5390`  | `cola.eliminar` lee la celda sin `as number` y devuelve `COLA_VACIA` si es `null`.                                                                                                  |
+| B2  | `22169f8`  | Lo mismo en `pila.sacar`, con `PILA_VACIA`.                                                                                                                                         |
+| M3  | `c517413`  | `aria-label` con posicion, puntero y valor en la celda apuntada (`Indice 2, CIMA, 9`); badge con `aria-hidden`.                                                                     |
+| B1  | `a7d68ce`  | El `TAMANO` del panel sale de `TAMAANO_PILA`, no de `celdas.length`.                                                                                                                |
+
+Y en la misma rama, al reescribir la documentacion:
+
+| ID  | Que se corrigio                                                                                                                                         |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| M1  | El modal de error de la pila usa `labels.error` (lo resolvio el generico), igual que el de la cola.                                                     |
+| M4  | `docs/services/README.md` describia `src/services/data-structures/`, una ruta que ya no existe. Reescrito al arbol real, con `cola.ts` y `registro.ts`. |
+| M5  | `docs/components/README.md` decia que `page.tsx` y el dominio importan el barrel; el unico import real es `src/app/error.tsx:4`, y es Client.           |
+| M6  | `PilaVisualizer` estaba clasificado como Server; es Client por importacion. Ahora dice eso, y lo mismo `ColaVisualizer`.                                |
+| B3  | El diagrama decia "Modal x4 -> FieldInput"; solo insertar y editar lo usan. Actualizado, con el arbol del refactor.                                     |
+| B4  | `cima === TAMAANO` -> `cima === TAMAANO_PILA`.                                                                                                          |
+| B5  | "Se valida con Zod en el borde" era falso: el borde usa regex y el service usa Zod. Ahora hay una tabla con las tres reglas y cual manda.               |
+
+### La simplificacion (por que C1 se resolvio asi)
+
+`PilaSection` y `ColaSection` eran **647 lineas de la misma cosa** (324 + 323):
+mismos 6 `useState`, mismos 6 handlers, mismos 4 modales.
+
+Ahora hay un `EstructuraSection<T>` (353 lineas, una sola copia de todo eso) y dos
+adaptadores de 49 lineas que solo traducen la forma del retorno de cada service.
+Las dos Section quedaron en **17 lineas** cada una.
+
+|                                    | Antes       | Ahora |
+| ---------------------------------- | ----------- | ----- |
+| `PilaSection` + `ColaSection`      | 647         | 34    |
+| Total (con generico y adaptadores) | 647         | 485   |
+| Copias de los 4 modales            | 2           | 1     |
+| Costo de una estructura nueva      | ~320 lineas | ~66   |
+
+El total baja 25%, pero la ganancia real es que el comportamiento vive en un solo
+sitio: un cambio en el flujo de los modales ya no hay que hacerlo dos veces.
+
+**Deuda que queda**: `EstructuraSection` tiene 353 lineas. Es el precio de tener
+los 4 modales en un componente; si crece mas, el proximo paso es extraer cada
+modal a su archivo, no volver a duplicar la seccion.
