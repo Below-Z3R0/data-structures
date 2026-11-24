@@ -4,7 +4,11 @@
       "title": "Estructuras de datos",
       "subtitle": "Pilas",
       "eyebrow": "Práctica interactiva",
-      "paragraph": "Una pila es una estructura lineal de tipo LIFO: el último elemento que entra es el primero que sale. Explorá su comportamiento, meté valores y observá cómo se transforman el arreglo y la variable CIMA."
+      "paragraph": "Una pila es una estructura lineal de tipo LIFO: el último elemento que entra es el primero que sale. Explorá su comportamiento, meté valores y observá cómo se transforman el arreglo y la variable CIMA.",
+      "labels": {
+        "idioma": "Elegir idioma",
+        "paleta": "Elegir paleta"
+      }
     },
     "section.pila": {
       "title": "Pila",
@@ -42,6 +46,46 @@
         "CANTIDAD_INVALIDA": "La pila no puede tener más de 6 elementos.",
         "sin_historial": "No hay ningún estado anterior al cual regresar."
       }
+    },
+    "section.cola": {
+      "title": "Cola",
+      "paragraph": "Una cola es una estructura lineal de tipo FIFO: el primero en entrar es el primero en salir. Insertá valores y mirá cómo se mueven FRENTE y FINAL en el arreglo circular.",
+      "labels": {
+        "frente": "FRENTE",
+        "final": "FINAL",
+        "max": "MAX",
+        "elementos": "ELEMENTOS",
+        "libres": "LIBRES",
+        "vacia": "COLA VACÍA",
+        "llena": "COLA LLENA",
+        "indice": "Índice"
+      },
+      "buttons": {
+        "insertar": "Insertar",
+        "eliminar": "Eliminar",
+        "regresar": "Regresar",
+        "editar": "Editar"
+      },
+      "modal": {
+        "insertar_titulo": "Insertar un valor",
+        "insertar_label": "Número a insertar",
+        "insertar_placeholder": "Ej: 42",
+        "eliminar_titulo": "Confirmar eliminación",
+        "eliminar_mensaje": "¿Seguro que querés sacar el valor del frente?",
+        "editar_titulo": "Editar el contenido de la cola",
+        "editar_label": "Valores separados por coma",
+        "editar_placeholder": "Ej: 5, 12, 30",
+        "cancelar": "Cancelar",
+        "confirmar": "Confirmar",
+        "aceptar": "Aceptar"
+      },
+      "errors": {
+        "COLA_LLENA": "La cola está llena: no se pueden insertar más elementos.",
+        "COLA_VACIA": "La cola está vacía: no hay nada que eliminar.",
+        "VALOR_INVALIDO": "El valor debe ser un número entero entre 1 y 99.",
+        "CANTIDAD_INVALIDA": "La cola no puede tener más de 6 elementos.",
+        "sin_historial": "No hay ningún estado anterior al cual regresar."
+      }
     }
   },
   "metadata": {
@@ -52,6 +96,11 @@
           "id": "pila",
           "label": "Pila",
           "description": "Último en entrar, primero en salir (LIFO)"
+        },
+        {
+          "id": "cola",
+          "label": "Cola",
+          "description": "Primero en entrar, primero en salir (FIFO)"
         }
       ]
     }

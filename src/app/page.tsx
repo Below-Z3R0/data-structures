@@ -31,6 +31,7 @@ export default async function Home({ searchParams }: PageProps) {
           meta: metadata["section.hero"],
         }}
         pila={content["section.pila"]}
+        cola={content["section.cola"]}
       />
     </main>
   );

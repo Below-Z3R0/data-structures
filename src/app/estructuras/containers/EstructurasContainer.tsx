@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ColaSection } from "@/app/estructuras/components/ColaSection";
 import { EstructurasHero } from "@/app/estructuras/components/EstructurasHero";
 import { PilaSection } from "@/app/estructuras/components/PilaSection";
 import type { EstructuraId } from "@/app/estructuras/services/registro";
@@ -18,6 +19,7 @@ import { SectionReveal } from "@/components/animations/Animations";
 export function EstructurasContainer({
   hero,
   pila,
+  cola,
 }: EstructurasContainerProps) {
   const [activa, setActiva] = useState<EstructuraId>(
     hero.meta.estructuras[0]?.id ?? "pila",
@@ -38,7 +40,11 @@ export function EstructurasContainer({
       <SectionReveal>
         {hero.meta.estructuras.map((estructura) => (
           <div key={estructura.id} hidden={estructura.id !== activa}>
-            {estructura.id === "pila" ? <PilaSection data={pila} /> : null}
+            {estructura.id === "pila" ? (
+              <PilaSection data={pila} />
+            ) : estructura.id === "cola" ? (
+              <ColaSection data={cola} />
+            ) : null}
           </div>
         ))}
       </SectionReveal>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  ColaContentSchema,
   HeroContentSchema,
   HeroMetadataSchema,
   PilaContentSchema,
@@ -22,6 +23,7 @@ import es from "./static/site.es.json";
 export type SiteContent = {
   "section.hero": z.infer<typeof HeroContentSchema>;
   "section.pila": z.infer<typeof PilaContentSchema>;
+  "section.cola": z.infer<typeof ColaContentSchema>;
 };
 
 export type SiteMetadata = {
@@ -44,6 +46,7 @@ const SitePayloadSchema: z.ZodType<SitePayload> = z.object({
   content: z.object({
     "section.hero": HeroContentSchema,
     "section.pila": PilaContentSchema,
+    "section.cola": ColaContentSchema,
   }),
   metadata: z.object({
     "section.hero": HeroMetadataSchema,
