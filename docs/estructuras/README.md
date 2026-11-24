@@ -1,7 +1,7 @@
 ---
 
 type: docs
-module: structures
+module: estructuras
 status: active
 created: 2026-11-09
 tags: [estructuras, pila, stack, ed1, lifo]
@@ -10,7 +10,10 @@ tags: [estructuras, pila, stack, ed1, lifo]
 # Estructuras de datos
 
 Las estructuras de datos que la app puede representar. Por ahora hay una
-sola: **PILA**. El menu de la cabecera esta preparado para agregar mas.
+sola: **PILA**. El menu de la cabecera es generico: renderiza un boton por
+cada entrada de `metadata["section.hero"].estructuras` de los JSON, asi que
+agregar una estructura es agregar su entrada al payload (ver la receta al
+final).
 
 ---
 
@@ -122,7 +125,8 @@ type ErrorPila =
   | "PILA_LLENA" // CIMA = TAMAÑO: no entra más
   | "PILA_VACIA" // CIMA = 0: no hay nada que sacar
   | "VALOR_INVALIDO" // no es entero, o no está entre 1 y 99
-  | "CANTIDAD_INVALIDA"; // la lista excede las 6 celdas
+  | "CANTIDAD_INVALIDA" // la lista excede las 6 celdas
+  | "sin_historial"; // regresar() sin estados previos
 ```
 
 | Error               | Cuando                          | Que ve el usuario             |
@@ -171,12 +175,26 @@ dato invalido aunque el service se use por otro camino.
 
 ### Agregar una estructura nueva
 
-1. Crear `src/app/estructuras/services/<nombre>.ts` con la logica pura y
+El menu se alimenta del payload, no de `registro.ts`: `page.tsx` pasa
+`metadata["section.hero"].estructuras` a `EstructurasContainer`, que
+renderiza un boton por entrada. `services/registro.ts` es el catalogo de
+**tipos** (`ESTRUCTURA_IDS` / `EstructuraId`): el enum con el que
+`EstructuraMetadataSchema` valida el `id` que viene del JSON.
+
+1. Agregar el id a `ESTRUCTURA_IDS` en
+   `src/app/estructuras/services/registro.ts`. Sin este paso el schema
+   rechaza el payload y el build falla.
+2. Crear `src/app/estructuras/services/<nombre>.ts` con la logica pura y
    su archivo de tests al lado.
-2. Registrar la estructura en `src/app/estructuras/services/registro.ts`.
-3. Agregar el componente que la dibuja en `src/app/estructuras/components/`.
-4. Agregar el contenido (textos, labels, errores) al JSON estatico de
+3. Agregar la entrada (`id`, `label`, `description`) a
+   `metadata["section.hero"].estructuras` en **los dos** JSON estaticos
+   (`src/services/data/static/site.es.json` y `site.en.json`). Este es el
+   paso que hace aparecer el boton en el menu.
+4. Agregar el componente que la dibuja en `src/app/estructuras/components/`
+   y renderizarlo en `EstructurasContainer` dentro del `map` del catalogo,
+   con el patron `hidden` para no desmontar la estructura inactiva.
+5. Agregar el contenido (textos, labels, errores) al `content` del JSON de
    ambos idiomas, en `section.pila` o en una seccion nueva.
-5. Si la estructura necesita su propia seccion en el payload: definí el
+6. Si la estructura necesita su propia seccion en el payload: definí el
    schema en `app/estructuras/schemas.ts`, ampliá el tipo `SiteContent` en
    `services/data/site.ts` y agregá la clave en los dos JSON estaticos.

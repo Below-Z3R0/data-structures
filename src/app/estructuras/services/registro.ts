@@ -1,9 +1,12 @@
 /**
  * Registro de estructuras de datos disponibles en la app.
  *
- * Cada estructura declara su identificador, su etiqueta visible y el
- * componente que la representa. Agregar una estructura nueva es agregar
- * una entrada a este array: el menu de la pagina la renderiza sola.
+ * Este archivo es el catalogo de TIPOS: `ESTRUCTURA_IDS` es la fuente unica
+ * de `EstructuraId` y el enum con el que el schema valida el `id` del
+ * payload. El menu NO se alimenta de aca: lo hace
+ * `metadata["section.hero"].estructuras` de los JSON estaticos. Agregar
+ * una estructura es agregar su id a `ESTRUCTURA_IDS` y su entrada a los
+ * dos JSON (ver docs/estructuras/README.md).
  *
  * Por ahora solo hay PILA (requisito 1 de la tarea).
  */

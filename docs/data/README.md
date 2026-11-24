@@ -78,7 +78,7 @@ repo, y si esta mal el error aparece al compilar.
 
 La validacion en runtime **si** se usa donde el dato entra del exterior:
 el valor que el usuario tipea en el modal de insercion, validado con
-`ValorPilaSchema` (ver `docs/structures/README.md`).
+`ValorPilaSchema` (ver `docs/estructuras/README.md`).
 
 ## Sin cache
 

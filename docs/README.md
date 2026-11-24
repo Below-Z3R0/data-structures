@@ -38,11 +38,11 @@ docs/
 | Si queres...                    | Lee                                 |
 | ------------------------------- | ----------------------------------- |
 | Levantar el proyecto            | `README.md` de la raiz del proyecto |
-| Entender la PILA                | `structures/README.md`              |
+| Entender la PILA                | `estructuras/README.md`             |
 | Agregar una paleta              | `theming/paleta-nueva.md`           |
 | Entender por que Bun y no pnpm  | `decisions/package-manager-bun.md`  |
 | Agregar un idioma               | `i18n/README.md`                    |
-| Agregar una estructura de datos | `structures/README.md`              |
+| Agregar una estructura de datos | `estructuras/README.md`             |
 | Agregar un componente           | `components/README.md`              |
 
 ## Convenciones
