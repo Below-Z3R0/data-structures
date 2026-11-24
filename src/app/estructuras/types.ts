@@ -65,6 +65,8 @@ export interface EstructuraMenuProps {
  * arriba).
  */
 export interface PilaViewData {
+  title: string;
+  paragraph: string;
   labels: PilaLabels;
   buttons: PilaButtons;
   modal: PilaModal;
