@@ -54,7 +54,7 @@ export function PilaVisualizer({
             {labels.tamano}
           </span>
           <span className="font-mono text-2xl font-bold text-foreground">
-            {pila.celdas.length}
+            {TAMAANO_PILA}
           </span>
         </div>
 
