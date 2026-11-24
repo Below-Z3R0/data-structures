@@ -14,18 +14,18 @@ Atomic design: tres niveles, una sola direccion de dependencia.
 ```
   ┌─────────────────────────────────────────────────────────┐
   │  organisms/          Secciones completas de la pagina   │
-  │  HeroSection · PilaSection · ErrorPage                   │
+  │  ErrorPage                                               │
   │  Reciben props tipadas. No hacen fetch.                 │
   └───────────────────────────┬─────────────────────────────┘
                               │  importa
   ┌───────────────────────────▼─────────────────────────────┐
   │  molecules/           Composiciones con estado           │
-  │  PilaVisualizer · Modal                                 │
+  │  Modal                                                  │
   └───────────────────────────┬─────────────────────────────┘
                               │  importa
   ┌───────────────────────────▼─────────────────────────────┐
   │  atoms/              Primitivas visuales                │
-  │  Button · PilaCell · PilaInput · Title1..4 · Paragraph  │
+  │  Button · FieldInput · Title1..4 · Paragraph            │
   │  Span · ThemeSwitcher · ThemeToggle · LanguageSwitcher  │
   │  NoiseTexture · BackgroundFX                            │
   │  Sin lógica de negocio. Sin datos de la base.           │
@@ -39,9 +39,10 @@ una molecule.
 
 | Nivel        | Componentes                                                                                                                                                                                     |
 | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `atoms/`     | `BackgroundFX` · `Button` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `PilaCell` · `PilaInput` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4` |
-| `molecules/` | `Modal` · `PilaVisualizer`                                                                                                                                                                      |
-| `organisms/` | `ErrorPage` · `HeroSection` · `PilaSection`                                                                                                                                                     |
+| `atoms/`     | `BackgroundFX` · `Button` · `FieldInput` · `LanguageSwitcher` · `NoiseTexture` · `Paragraph` · `Span` · `ThemeSwitcher` · `ThemeToggle` · `Title1` · `Title2` · `Title3` · `Title4` |
+| `molecules/` | `Modal`                                                                                                                                                                                          |
+| `organisms/` | `ErrorPage`                                                                                                                                                                                     |
+| dominio     | `src/app/estructuras/` — `EstructurasContainer` · `EstructurasHero` · `EstructuraMenu` · `PilaSection` · `PilaVisualizer` · `PilaCell`                      |
 
 Ademas: `animations/` (primitivas de Motion), `hooks/` (ThemeProvider y
 `useTheme`), `skeletons/` (`HomePageSkeleton`, `SkeletonPulse`).
@@ -53,18 +54,23 @@ navegador.
 
 | Componente         | Tipo       | Por que                                   |
 | ------------------ | ---------- | ----------------------------------------- |
-| `HeroSection`      | Server     | Solo renderiza props                      |
-| `PilaVisualizer`   | Server     | Solo dibuja                               |
 | `ErrorPage`        | Server     | Solo renderiza props                      |
-| `PilaSection`      | **Client** | Tiene el estado de la pila                |
 | `Modal`            | **Client** | AnimatePresence y handlers                |
-| `PilaCell`         | **Client** | AnimatePresence para el valor de la celda |
-| `PilaInput`        | **Client** | Input controlado                          |
+| `FieldInput`       | **Client** | Input controlado                          |
 | `LanguageSwitcher` | **Client** | `useRouter` + `useSearchParams`           |
 | `ThemeSwitcher`    | **Client** | `useTheme`                                |
 
+Los componentes del dominio de estructuras viven en `src/app/estructuras/`:
+`EstructurasContainer` (Client, dueno del estado de la estructura activa),
+`EstructurasHero` (Client, cabecera + menu), `EstructuraMenu` (Client, los
+botones del menu), `PilaSection` (Client, estado de la pila),
+`PilaVisualizer` (Server, dibuja el arreglo) y `PilaCell` (Client,
+AnimatePresence para el valor de la celda).
+
 `src/app/page.tsx` es un Server Component: **no puede tener estado**. El
-estado de la pila vive en `PilaSection`, que es `"use client"`.
+estado de la pila vive en `PilaSection`, que es `"use client"`. El estado
+de la estructura seleccionada vive en `EstructurasContainer`, que es el
+ancestro comun de la cabecera y de la seccion de la estructura.
 
 ## El bug del barrel (importar directo)
 
@@ -87,15 +93,15 @@ import { LanguageSwitcher } from "../atoms/LanguageSwitcher";
 Aplica a todos los imports desde un Server Component. Los Client
 Components pueden usar el barrel sin problema.
 
-Los archivos afectados hoy: `src/app/page.tsx`,
-`src/components/organisms/HeroSection.tsx`,
-`src/components/molecules/PilaVisualizer.tsx`.
+Los archivos afectados hoy: `src/app/page.tsx` y los componentes del
+dominio en `src/app/estructuras/`.
 
 ## Props
 
-- Los contratos viven en `src/components/types.ts`.
+- Cada componente compartido declara sus props en su propio archivo.
+- Los contratos del dominio viven en `src/app/estructuras/types.ts`.
 - Los tipos del dominio se infieren con `z.infer` desde
-  `src/components/schemas.ts`.
+  `src/app/estructuras/schemas.ts`.
 - Si un prop no describe **como se ve** el componente sino **que dato**
   es, ese prop pertenece al organism, no a la molecule. Por eso
   `PilaSection` recibe un objeto `data` agrupado y no ocho props
@@ -119,7 +125,10 @@ indica cuando actualizarlos: no los reescribas por iniciativa propia.
 ## Agregar un componente
 
 1. Definir el nivel (atom, molecule u organism).
-2. Escribir los props en `types.ts`.
+2. Declarar los props en el propio componente.
 3. Implementarlo en `src/components/<nivel>/<Nombre>.tsx`.
 4. Exportarlo desde `components.ts`.
 5. Si es una seccion nueva, agregar su skeleton.
+
+Los componentes de un dominio NO van aqui: viven en
+`src/app/estructuras/` con sus `components/`, `containers/` y `services/`.

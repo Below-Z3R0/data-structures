@@ -22,11 +22,11 @@ funciona... hasta que querés verificar los casos limite.
 
 ## Decision
 
-**Toda la logica de la estructura va en `src/services/data-structures/`,
+**Toda la logica de la estructura va en `src/app/estructuras/services/`,
 en codigo puro.** El componente solo la orquesta y la muestra.
 
 ```ts
-// src/services/data-structures/pila.ts
+// src/app/estructuras/services/pila.ts
 export function meter(pila: Pila, valor: number): ResultadoOperacion<Pila>;
 export function sacar(pila: Pila): ResultadoOperacion<{ pila; valor }>;
 ```

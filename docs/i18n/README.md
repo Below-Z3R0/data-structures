@@ -47,7 +47,7 @@ router.push(`?${params.toString()}`);
 
 ## Tipos
 
-`Language` vive en `src/components/types.ts`:
+`Language` vive en `src/app/estructuras/types.ts`:
 
 ```ts
 export type Language = "en" | "es";

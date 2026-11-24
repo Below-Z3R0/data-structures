@@ -81,7 +81,7 @@ devuelve `{ pila, valor }` y no solo la pila nueva.
 
 ### En el codigo
 
-La logica esta en `src/services/data-structures/pila.ts`. Es **puro**: sin
+La logica esta en `src/app/estructuras/services/pila.ts`. Es **puro**: sin
 React, sin DOM, sin globals. Por eso se testea de forma trivial.
 
 ```ts
@@ -140,11 +140,11 @@ Los errores de la estructura **se muestran en un modal**, no en
 ### El flujo en la UI
 
 ```
-PilaSection (organism, "use client")
+PilaSection (component, "use client")
   ├─ estado: pila, historial, modal abierto
-  ├─ PilaVisualizer (molecule)   → PilaCell (atom) x6
+  ├─ PilaVisualizer              → PilaCell x6
   ├─ botones: Insertar / Eliminar / Regresar / Editar
-  └─ Modal (molecule) x4         → PilaInput (atom)
+  └─ Modal x4                    → FieldInput (atom)
 ```
 
 | Boton    | Accion                | Modal                   |
@@ -171,10 +171,10 @@ dato invalido aunque el service se use por otro camino.
 
 ### Agregar una estructura nueva
 
-1. Crear `src/services/data-structures/<nombre>.ts` con la logica pura y
+1. Crear `src/app/estructuras/services/<nombre>.ts` con la logica pura y
    su archivo de tests al lado.
-2. Registrar la estructura en `src/services/data-structures/structures.ts`.
-3. Agregar el componente que la dibuja en `components/organisms/`.
+2. Registrar la estructura en `src/app/estructuras/services/registro.ts`.
+3. Agregar el componente que la dibuja en `src/app/estructuras/components/`.
 4. Agregar el contenido (textos, labels, errores) al JSON estatico de
    ambos idiomas, en `section.pila` o en una seccion nueva.
 5. Si la estructura necesita su propia seccion en el payload: definí el
