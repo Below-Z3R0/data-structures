@@ -13,7 +13,7 @@ bun run test:watch    # en watch
 bun run test -- -t "LIFO"   # solo los tests cuyo nombre matchea
 ```
 
-Cobertura actual: **17 tests, 1 archivo** (`src/app/estructuras/services/pila.test.ts`),
+Cobertura actual: **18 tests, 1 archivo** (`src/app/estructuras/services/pila.test.ts`),
 todos verdes.
 
 Los tests son de **lógica pura**: no montan React, no tocan el DOM, no usan
@@ -79,17 +79,17 @@ confunden fácil, y acá son estados válidos distintos.
 
 ---
 
-## `regresar` (deshacer) — 2 tests
+## `regresar` (deshacer) — 3 tests
 
-| Test                                                 | Qué fija                                                                              |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `devuelve el estado anterior y consume el historial` | Con un estado guardado, `regresar` devuelve la pila previa y deja el historial vacío. |
-| `falla si no hay historial`                          | Con historial vacío devuelve `ok: false`.                                             |
+| Test                                                 | Qué fija                                                                                  |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `devuelve el estado anterior y consume el historial` | Con un estado guardado, `regresar` devuelve la pila previa y deja el historial vacío.     |
+| `falla si no hay historial`                          | Con historial vacío devuelve `ok: false` y `error: "sin_historial"`.                      |
+| `no confunde 'sin_historial' con 'PILA_VACIA'`       | `regresar` sin historial da `sin_historial`; `sacar` con CIMA 0 sigue dando `PILA_VACIA`. |
 
-> **Cambia con A1.** Hoy el segundo test espera `PILA_VACIA`, que el
-> `bugs.md` marca como incorrecto: `regresar` sin historial no es "pila vacía".
-> Cuando se cierre A1, `ErrorPila` gana `"sin_historial"` y este test tiene que
-> esperar **ese** código. El test se invierte, no se borra.
+> **Cambió con A1.** El segundo test esperaba `PILA_VACIA`, que confundía el
+> undo sin historial con la pila sin elementos. Ahora `ErrorPila` incluye
+> `"sin_historial"` y el tercer test fija que los dos códigos no se mezclen.
 
 **Por qué existen:** "Regresar" es el único mecanismo de undo. El test de
 consumo verifica que no se pueda deshacer infinitas veces el mismo paso.

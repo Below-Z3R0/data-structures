@@ -42,6 +42,32 @@ mantenimiento), **BAJO** (desviacion menor).
 
 ---
 
+## Cierre (M1b)
+
+Los seis hallazgos de este recorte quedaron cerrados en `mod/m1-arquitectura`.
+Cada fix tiene su commit, y el test de A1 se invirtio: no se borro ninguno.
+
+| ID  | Qué se hizo                                                                          | Commit    |
+| --- | ------------------------------------------------------------------------------------ | --------- |
+| A1  | `ErrorPila` gana `sin_historial`; `regresar()` lo devuelve y la UI usa el error real | `ad74057` |
+| A2  | `PilaViewData` gana `title` y `paragraph`; `PilaSection` los renderiza               | `1cf76b5` |
+| A3  | `ESTRUCTURA_IDS` tipa el `id` del catálogo; sin cast y con `activa` derivada         | `354c5b7` |
+| A4  | Receta corregida y `docs/structures/` movido a `docs/estructuras/`                   | `57e7831` |
+| A5  | La estructura inactiva se oculta con `hidden`, no se desmonta                        | `00a463f` |
+| M2  | Menú como `radiogroup`/`radio` + `aria-checked`, con `menu_label` traducible         | `ede4875` |
+
+Verificado en ese HEAD: `typecheck`, `lint`, `test` (18 tests) y `build` en 0;
+`/?lang=es` y `/?lang=en` sirven el título y el párrafo de la sección de pila
+en el DOM visible, y el `aria-label` del menú cambia de idioma.
+
+**Desviaciones del alcance:** para que A3 fuera real hubo que validar el
+payload estático en `src/services/data/site.ts` (`SitePayloadSchema.parse`):
+el JSON importado por TypeScript pierde los literales y sin el parseo el
+`z.enum` no estrechaba nada. Los hallazgos MEDIO/BAJO restantes (M1, M3-M6,
+B1-B5) siguen abiertos.
+
+---
+
 ## Hallazgos
 
 ### CRITICO
