@@ -52,10 +52,8 @@ export function PilaSection({ data }: { data: PilaViewData }) {
   };
 
   /** Muestra el modal de error con el mensaje del codigo de error. */
-  const mostrarError = (error: ErrorPila | "sin_historial") => {
-    setErrorMensaje(
-      error === "sin_historial" ? errors.sin_historial : errors[error],
-    );
+  const mostrarError = (error: ErrorPila) => {
+    setErrorMensaje(errors[error]);
     setModalAbierto("error");
   };
 
@@ -129,7 +127,7 @@ export function PilaSection({ data }: { data: PilaViewData }) {
   const handleRegresar = () => {
     const resultado = regresar(historial);
     if (!resultado.ok) {
-      mostrarError("sin_historial");
+      mostrarError(resultado.error);
       return;
     }
 
